@@ -171,12 +171,15 @@ head(carInsurance_sin_faltantes,10)
 ## (d) Create a new data set by imputing all the missing values with 0.
 
 ``` r
-# Crear una copia del conjunto de datos original
-carInsurance_imputed <- carInsurance
+library(tidyimpute)
 
-# Reemplazar los valores faltantes con 0
-carInsurance_imputed[is.na(carInsurance_imputed)] <- 0
-head(carInsurance_imputed,10)
+# Crear una copia del conjunto de datos original
+newCarInsurance <- carInsurance
+
+# Reemplazar los valores NA por ceros en todas las columnas
+newCarInsurance <- impute_zero_all(newCarInsurance)
+
+head(newCarInsurance, 10)
 ```
 
     ##    symboling normalizedLosses        make fuelType aspiration nDoors
@@ -223,3 +226,5 @@ head(carInsurance_imputed,10)
     ## 8                8.5        110    5500      19         25 18920
     ## 9                8.3        140    5500      17         20 23875
     ## 10               7.0        160    5500      16         22     0
+
+## 
