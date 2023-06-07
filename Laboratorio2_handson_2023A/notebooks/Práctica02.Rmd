@@ -1,58 +1,75 @@
 ---
-title: "R Notebook"
-output:
-  github_document:
-    html_notebook
+title: "Práctica 02"
+output: github_document
 ---
-
+## 1. Assessing Data Quality
+## Load the following packages: dplyr, na.tools, tidyimpute (version from github decisionpatterns/tidyimpute”)
 ```{r}
 library(dplyr)
 library(na.tools)
 library(tidyimpute)
-
-
 ```
 
-ss
+## Load the carInsurance data set about the insurance risk rating of cars based on several characteristics of each car
 ```{r}
-# Cargar el conjunto de datos
 
-load("../data/01_datamanip/carIns_final.Rdata")
-ls()
+data <- read.csv('../data/01_datamanip/carInsurance.data', header=FALSE)
 
-carIns_final
+data[data == "?"] <- NA
 
+carInsurance <- data.frame(data)
+
+# List of names obtained of webpage
+header <- c("symboling","normalizedLosses","make","fuelType","aspiration","nDoors","bodyStyle","driveWheels","engineLocation","wheelBase","length","width","height","curbWeight","engineType","nCylinders","engineSize","fuelSystem","bore","stroke","compression-ratio","horsepower","peakRpm","cityMpg","highwayMpg","price")
+
+# Assign header a names of df
+names(carInsurance) <- header
+
+head(carInsurance,10)
 ```
-ss
+### (a) Check if there are any missing values.
+
+
 ```{r}
-# Comprobar si hay valores faltantes en el conjunto de datos
-missing_values <- sum(is.na(carIns_final))
-if (missing_values > 0) {
-  print("Hay valores faltantes en el conjunto de datos")
+has_missing <- any_na(carInsurance)
+
+if (has_missing) {
+  print("There are missing values in the dataset.")
 } else {
-  print("No hay valores faltantes en el conjunto de datos")
+  print("There are no missing values in the dataset.")
 }
 ```
-
-ss
+### (b) Count the number of cases that have, at least, one missing value
 ```{r}
-library(dplyr)
+# Count the number of cases with at least one missing value
+num_missing_cases <- carInsurance %>%
+  filter_any_na() %>%
+  count()
 
-# Verificar si hay algún valor faltante en cada fila
-missing_cases <- carIns_final %>% 
-  summarise(has_missing = anyNA(.))
-
-# Contar el número de casos con al menos un valor faltante
-num_missing_cases <- sum(missing_cases$has_missing)
-
-# Imprimir el resultado
-cat("Número de casos con al menos un valor faltante:", num_missing_cases, "\n")
-
-# Contar el número de casos con al menos un valor faltante
-num_missing_cases2 <- sum(is.na(carIns_final))
-
-# Imprimir el resultado
-cat("Número de casos con al menos un valor faltante:", num_missing_cases2, "\n")
+print(num_missing_cases)
 
 ```
+## (c) Create a new data set by removing all the cases that have missing values.
+```{r}
+carInsurance_sin_faltantes <- drop_rows_any_na(carInsurance)
+head(carInsurance_sin_faltantes,10)
 
+```
+## (d) Create a new data set by imputing all the missing values with 0.
+```{r}
+
+
+library(tidyimpute)
+
+# Crear una copia del conjunto de datos original
+newCarInsurance <- carInsurance
+
+# Reemplazar los valores NA por ceros en todas las columnas
+newCarInsurance <- impute_zero_all(newCarInsurance)
+
+head(newCarInsurance, 10)
+
+
+
+```
+## 
