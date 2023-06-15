@@ -1,0 +1,133 @@
+---
+title: "Práctica 03"
+output: github_document
+---
+
+## Load the following package: dplyr
+
+```{r}
+library("dplyr")
+library("ggplot2")
+```
+
+## Load the data set carIns final. It already has the imputation of missing values.
+
+```{r}
+data <- load("../data/03_data/carIns_final.Rdata")
+#print(carIns_final)
+
+
+```
+## 1. Using the package dplyr, answer the following questions:
+### (a) Obtain the number of cars by bodyStyle.
+
+```{r}
+# Obtener el número de autos por bodyStyle
+resultado <- carIns_final  %>%  group_by(bodyStyle) %>% count()
+print(resultado)
+```
+### (b) Obtain the number of cars by bodyStyle and fuelType.
+
+```{r}
+resultado <- carIns_final  %>%  group_by(bodyStyle, fuelType) %>% count()
+print(resultado)
+
+```
+### (c) Obtain the mean and the standard deviation of the attribute cityMpg by bodyStyle in ascending order.
+```{r}
+resultado <- carIns_final %>%
+  
+# agrupa por bodyStyle  
+  group_by(bodyStyle) %>%
+# agrupa por bodyStyle  
+#calculo de 
+  summarize(mean_cityMpg = mean(cityMpg),
+            sd_cityMpg = sd(cityMpg)) %>%
+#orden ascendente
+  arrange(mean_cityMpg)
+
+print(resultado)
+```
+
+### (d) Also by bodyStyle, and for the attributes cityMpg and highwayMpg, obtain the mean, the standard deviation, the median and the inter-quartile range.
+```{r}
+resultado <- carIns_final %>% 
+  group_by(bodyStyle) %>%
+  summarize(
+    mean_cityMpg = mean(cityMpg),
+    sd_cityMpg = sd(cityMpg),
+    median_cityMpg = median(cityMpg),
+    IQR_cityMpg = IQR(cityMpg),
+    
+    mean_highwayMpg = mean(highwayMpg),
+    sd_highwayMpg = sd(highwayMpg),
+    median_highwayMpg = median(highwayMpg),
+    IQR_highwayMpg = IQR(highwayMpg)
+  )
+resultado
+```
+# 2 Visualization
+## 2. Using the package ggplot2, create graphs that you find adequate to answer the following questions.
+### (e) Show the relationship between the attributes cityMpg and highwayMpg
+```{r}
+# Creacion de scatter plot
+plot(carIns_final$cityMpg, carIns_final$highwayMpg, 
+     xlab = "City MPG", ylab = "Highway MPG",
+     main = "Relationship between City MPG and Highway MPG",
+     pch = 16, col = "blue",
+     xlim = c(0, 55), ylim = c(0, 55),
+     xaxp = c(0, 50, 5), yaxp = c(0, 50, 5))
+
+# Agregar linea de tendencia o trendline
+abline(lm(carIns_final$highwayMpg ~ carIns_final$cityMpg), col = "red")
+
+# Agregar lineas de cuadricula o gridlines
+grid()
+
+# Agregar una leyenda o legend
+legend("top", legend = "Trendline", col = "red", lty = 1, bty = "n")
+
+# Agregar etiquetas a algunos puntos de datos (opcional)
+text(carIns_final$cityMpg[1:10], carIns_final$highwayMpg[1:10], 
+     labels = rownames(carIns_final)[1:10], pos = 4, col = "black")
+
+```
+### (f) Show the distribution of cars by bodyStyle.
+```{r}
+
+# Count the number of cars by bodyStyle
+bodyStyle_counts <- table(carIns_final$bodyStyle)
+
+# Create a bar plot
+barplot(bodyStyle_counts, 
+        xlab = "Body Style",
+        ylab = "Number of Cars",
+        main = "Distribution of Cars by Body Style",
+        col = "blue")
+
+```
+
+### (g) Show the distribution of cars by price. Suggestion: create bins of width equal to 5000.
+```{r}
+
+# Calcular los límites de los intervalos
+min_price <- min(carIns_final$price)
+max_price <- max(carIns_final$price)
+interval_width <- 5000
+breaks <- seq(min_price, max_price + interval_width, by = interval_width)
+
+# Crear el gráfico de histograma
+hist(carIns_final$price, 
+     breaks = breaks,
+     xlab = "Precio",
+     ylab = "Número de Autos",
+     main = "Distribución de Autos por Precio",
+     col = "blue")
+
+
+```
+### (h) Add the information of the density estimation to the previous graph.
+```{r}
+
+```
+
