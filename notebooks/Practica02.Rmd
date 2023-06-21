@@ -2,8 +2,9 @@
 title: "Práctica 02"
 output: github_document
 ---
+# 2 Hands On: Data Quality and Pre-Processing
 ## 1. Assessing Data Quality
-## Load the following packages: dplyr, na.tools, tidyimpute (version from github decisionpatterns/tidyimpute”)
+### Load the following packages: dplyr, na.tools, tidyimpute (version from github decisionpatterns/tidyimpute”)
 ```{r}
 library(na.tools)
 library(devtools)
@@ -13,7 +14,7 @@ library(tidyimpute)
 library(sos)
 ```
 
-## Load the carInsurance data set about the insurance risk rating of cars based on several characteristics of each car
+### Load the carInsurance data set about the insurance risk rating of cars based on several characteristics of each car
 ```{r}
 #lee archivo csv, se indica que no contiene fila de encabezado
 data <- read.csv('../data/02_data/carInsurance.data', header=FALSE)
@@ -62,7 +63,7 @@ typeof(num_valores_faltantes)
 print(num_valores_faltantes)
 
 ```
-## (c) Create a new data set by removing all the cases that have missing values.
+### (c) Create a new data set by removing all the cases that have missing values.
 ```{r}
 #head(carInsurance,10)
 #count(carInsurance)
@@ -70,7 +71,7 @@ carInsurance_sin_NA <- drop_rows_any_na(carInsurance)
 head(carInsurance_sin_NA,10)
 #count(carInsurance_sin_NA)
 ```
-## (d) Create a new data set by imputing all the missing values with 0.
+### (d) Create a new data set by imputing all the missing values with 0.
 ```{r}
 
 # Crear una copia del conjunto de datos original y reemplaza los valores NA por ceros, se aplica a todo el conjunto de datos
@@ -84,7 +85,7 @@ head(newCarInsurance, 10)
 
 
 ```
-## (e) Create a new data set by imputing the mean in all the columns which have double type values.
+### (e) Create a new data set by imputing the mean in all the columns which have double type values.
 
 ```{r}
 
@@ -95,9 +96,9 @@ newCarInsurance <- carInsurance
 
 # Identificar columnas con valores de tipo double
 columnas_double <- sapply(carInsurance, is.double)
-columnas_double
+#columnas_double
 nombres_columnas_double <- names(columnas_double[columnas_double])
-nombres_columnas_double
+#nombres_columnas_double
 #typeof(nombres_columnas_double)
 
 # Calcular la media de cada columna
@@ -120,5 +121,218 @@ for (col in nombres_columnas_double) {
 head(nuevo_data, 10)
 
 
+```
+
+### (f) Create a new data set by imputing the mode in all the columns which have integer type values.
+
+```{r}
+# Cargar el paquete necesario
+library(modeest)
+
+newCarInsurance2 <- carInsurance 
+columnas_integer <- sapply(carInsurance, is.integer)
+columnas_integer
+nombres_columnas_integer <- names(columnas_integer[columnas_integer])
+nombres_columnas_integer
+
+
+# Crear una función personalizada para calcular la moda de un vector
+moda_personalizada <- function(x) {
+  moda <- unique(x)[which.max(tabulate(match(x, unique(x))))]
+  if (length(moda) == 0) {  # Si no hay moda, devolver NA
+    return(NA)
+  } else {
+    return(moda)
+  }
+}
+
+# Calcular la moda en las columnas de tipo double
+moda <- sapply(carInsurance[, nombres_columnas_integer], moda_personalizada)
+
+# Resultado: vector con las modas de cada columna
+moda
+
+
+# Crear un nuevo conjunto de datos imputando la media en las columnas correspondientes
+nuevo_data_moda <- carInsurance
+head(nuevo_data_moda, 10)
+
+
+for (col in nombres_columnas_integer) {
+  nuevo_data_moda[[col]] <- moda[col]
+}
+head(nuevo_data_moda, 10)
+
+```
+
+
+### (g) Create a new data set by imputing the most frequent value to the column ”nDoors”.
+### Tip: use the function impute_replace()
+
+
+```{r}
+
+
+# Crear un nuevo conjunto de datos
+newCarInsurance2 <- carInsurance
+
+# Obtener el valor más frecuente en la columna "nDoors"
+valorMasFrecuente <- names(which.max(table(newCarInsurance2$nDoors)))
+valorMasFrecuente
+
+# Imputar el valor más frecuente en la columna "nDoors"
+newCarInsurance2$nDoors[is.na(newCarInsurance2$nDoors)] <- valorMasFrecuente
+
+# Verificar el resultado
+head(newCarInsurance2)
+
+# Imputar el valor más frecuente en la columna "nDoors"
+newCarInsurance2$nDoors <- valorMasFrecuente
+
+# Verificar el resultado
+head(newCarInsurance2)
+
+
+```
+
+### (h) Combine the three last imputations to obtain a final dataset. Are there any duplicated cases?
+### Tip: use the functions distinct() and count()
+
+
+```{r}
+# Crear un nuevo conjunto de datos imputando la media en las columnas correspondientes
+newCarInsuranceFInal <- carInsurance
+# Identificar columnas con valores de tipo double
+columnas_double <- sapply(carInsurance, is.double)
+#columnas_double
+nombres_columnas_double <- names(columnas_double[columnas_double])
+#nombres_columnas_double
+
+# Calcular la media de cada columna
+media <- colMeans(carInsurance[,nombres_columnas_double])
+#media
+
+for (col in nombres_columnas_double) {
+  newCarInsuranceFInal[[col]] <- media[col]
+}
+#head(newCarInsuranceFInal)
+
+columnas_integer <- sapply(carInsurance, is.integer)
+#columnas_integer
+nombres_columnas_integer <- names(columnas_integer[columnas_integer])
+#nombres_columnas_integer
+
+
+# Crear una función personalizada para calcular la moda de un vector
+moda_personalizada <- function(x) {
+  moda <- unique(x)[which.max(tabulate(match(x, unique(x))))]
+  if (length(moda) == 0) {  # Si no hay moda, devolver NA
+    return(NA)
+  } else {
+    return(moda)
+  }
+}
+
+# Calcular la moda en las columnas de tipo double
+moda <- sapply(carInsurance[, nombres_columnas_integer], moda_personalizada)
+
+# Resultado: vector con las modas de cada columna
+#moda
+
+for (col in nombres_columnas_integer) {
+  newCarInsuranceFInal[[col]] <- moda[col]
+}
+#head(newCarInsuranceFInal)
+
+
+# Obtener el valor más frecuente en la columna "nDoors"
+valorMasFrecuente <- names(which.max(table(newCarInsuranceFInal$nDoors)))
+#valorMasFrecuente
+
+# Imputar el valor más frecuente en la columna "nDoors"
+newCarInsuranceFInal$nDoors[is.na(newCarInsuranceFInal$nDoors)] <- valorMasFrecuente
+
+# Verificar el resultado
+#head(newCarInsuranceFInal)
+
+# Imputar el valor más frecuente en la columna "nDoors"
+newCarInsuranceFInal$nDoors <- valorMasFrecuente
+
+# Verificar el resultado
+head(newCarInsuranceFInal)
+
+
+
+
+# Verificar si existen casos duplicados
+casosDuplicados <- newCarInsuranceFInal %>%
+  distinct() %>%
+  count()
+
+# Imprimir el resultado
+if (casosDuplicados$n == nrow(newCarInsuranceFInal)) {
+  print("No hay casos duplicados en el conjunto de datos.")
+} else {
+  print("Existen casos duplicados en el conjunto de datos.")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Verificar duplicados por columna
+duplicadosPorColumna <- newCarInsuranceFInal %>%
+  group_by(across(everything())) %>%
+  count() %>%
+  filter(n > 1) %>%
+  select(-n)
+
+# Imprimir el resultado
+if (nrow(duplicadosPorColumna) == 0) {
+  print("No hay columnas con duplicados en el conjunto de datos.")
+} else {
+  print("Columnas con duplicados y su conteo respectivo:")
+  print(duplicadosPorColumna)
+}
+
+
+```
+
+## 2. Data Pre-Processing
+
+### 2. Load the package dlookr. Use the same car insurance data set above and apply the following transformations to the price attribute. Be critical regarding the obtained results
+
+```{r}
+library(dlookr)
+
+
+```
+
+### (a) Apply range-based normalization and z-score normalization.
+### Tip: use the function transform().
+
+
+```{r}
+newCarInsuranceNormalizada <- carInsurance
+
+
+newCarInsuranceNormalizada <- newCarInsuranceNormalizada %>%
+  mutate(price = as.numeric(as.character(price)))
+
+creatinine_minmax <- transform(newCarInsuranceNormalizada$price, method = "zscore")
+creatinine_minmax
+
+newCarInsuranceNormalizada %>% 
+  mutate(price = transform(newCarInsuranceNormalizada$price, method = "zscore")) %>% 
+  select(price) %>% 
+  boxplot()
 ```
 
