@@ -6,10 +6,13 @@
 
 ## Video explicativo del proyecto
 
+
+
 | Plataforma | URL |
 | ------ | ------ |
 | Youtube | https://youtu.be/z5HAPr-j-h0 |
 
+[![Proyecto Analítica Descriptiva - Javier Criollo](https://i.ytimg.com/vi/z5HAPr-j-h0/maxresdefault.jpg)](https://youtu.be/z5HAPr-j-h0 "Proyecto Analítica Descriptiva - Javier Criollo")
 ## Tema: 
 
 ### Se busca ver cuál es la provincia donde hubo más desaparecidos en Ecuador, encontrando el perfil de la persona que es más frecuente a desaparecer
