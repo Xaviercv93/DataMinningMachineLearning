@@ -8,7 +8,7 @@
 
 | Plataforma | URL |
 | ------ | ------ |
-| Youtube | [plugins/dropbox/README.md][PlDb] |
+| Youtube | https://youtu.be/z5HAPr-j-h0 |
 
 ## Tema: 
 
