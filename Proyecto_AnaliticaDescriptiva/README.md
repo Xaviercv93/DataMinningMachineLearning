@@ -12,7 +12,7 @@
 | ------ | ------ |
 | Youtube | https://youtu.be/z5HAPr-j-h0 |
 
-[![Proyecto Analítica Descriptiva - Javier Criollo](https://i.ytimg.com/vi/z5HAPr-j-h0/maxresdefault.jpg)](https://youtu.be/z5HAPr-j-h0 "Proyecto Analítica Descriptiva - Javier Criollo")
+[![Proyecto Analítica Descriptiva - Javier Criollo](https://res.cloudinary.com/marcomontalbano/image/upload/v1688004014/video_to_markdown/images/youtube--z5HAPr-j-h0-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/z5HAPr-j-h0 "Proyecto Analítica Descriptiva - Javier Criollo")
 ## Tema: 
 
 ### Se busca ver cuál es la provincia donde hubo más desaparecidos en Ecuador, encontrando el perfil de la persona que es más frecuente a desaparecer
