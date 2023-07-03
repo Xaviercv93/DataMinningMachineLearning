@@ -873,3 +873,103 @@ cat("Niveles de equalWidth: ", levels(newCarInsuranceFInal$equalWidth), "\n")
 ```
 
     ## Niveles de equalWidth:  [0,11350] (11350,22700] (22700,34050] (34050,45400]
+
+## 3. With the seed 111019 obtain the following samples on the car insurance data set.
+
+### Tip: use the function sample_frac().
+
+### (a) A random sample of 60% of the cases, with replacement
+
+``` r
+set.seed(111019)
+
+sample_60_percent <- newCarInsuranceFInal %>%
+  sample_frac(0.6, replace = TRUE)
+
+head(sample_60_percent)
+```
+
+    ##   symboling normalizedLosses       make fuelType aspiration nDoors   bodyStyle
+    ## 1         0              128     nissan   diesel        std    two       sedan
+    ## 2         0              101      honda      gas        std    two   hatchback
+    ## 3         0              161     peugot      gas        std   four       sedan
+    ## 4         0                0       audi      gas        std    two       sedan
+    ## 5         0              102     subaru      gas        std   four       sedan
+    ## 6         0                0 volkswagen      gas        std    two convertible
+    ##   driveWheels engineLocation wheelBase   length   width   height curbWeight
+    ## 1         fwd          front  98.75659 174.0493 65.9078 53.72488       2385
+    ## 2         fwd          front  98.75659 174.0493 65.9078 53.72488       2385
+    ## 3         rwd          front  98.75659 174.0493 65.9078 53.72488       2385
+    ## 4         fwd          front  98.75659 174.0493 65.9078 53.72488       2385
+    ## 5         4wd          front  98.75659 174.0493 65.9078 53.72488       2385
+    ## 6         fwd          front  98.75659 174.0493 65.9078 53.72488       2385
+    ##   engineType nCylinders engineSize fuelSystem bore stroke compression-ratio
+    ## 1        ohc       four        122        idi 2.99   3.47          10.14254
+    ## 2        ohc       four        122       1bbl 2.91   3.41          10.14254
+    ## 3          l       four        122       mpfi 3.46   3.19          10.14254
+    ## 4        ohc       five        122       mpfi 3.19   3.40          10.14254
+    ## 5       ohcf       four        122       2bbl 3.62   2.64          10.14254
+    ## 6        ohc       four        122       mpfi 3.19   3.40          10.14254
+    ##   horsepower peakRpm cityMpg highwayMpg price   equalFrequency    equalWidth
+    ## 1         55    4800      31         25  7099     [0,7662.333]     [0,11350]
+    ## 2         76    6000      31         25  6529     [0,7662.333]     [0,11350]
+    ## 3         97    5000      31         25 16630    (16500,45400] (11350,22700]
+    ## 4        110    5500      31         25 15250    (10198,16500] (11350,22700]
+    ## 5         82    4800      31         25  9233 (7662.333,10198]     [0,11350]
+    ## 6         90    5500      31         25 11595    (10198,16500] (11350,22700]
+
+### (b) A stratified sample of 60% of the cases of cars, according to the fuelType attribute.
+
+``` r
+set.seed(111019)  # Establece la semilla para reproducibilidad
+
+
+# Calcula el tamaño de la muestra para cada categoría de fuelType
+tamaños_muestra <- newCarInsuranceFInal %>%
+  group_by(fuelType) %>%
+  summarise(tamaño_muestra = round(n() * 0.6))
+
+# Obtiene la muestra estratificada
+muestra_estratificada <- newCarInsuranceFInal %>%
+  inner_join(tamaños_muestra, by = "fuelType") %>%
+  group_by(fuelType) %>%
+  sample_frac(size = 0.6, replace = FALSE)
+
+# Muestra los primeros casos de la muestra estratificada
+head(muestra_estratificada)
+```
+
+    ## # A tibble: 6 × 29
+    ## # Groups:   fuelType [1]
+    ##   symboling normalizedLosses make          fuelType aspiration nDoors bodyStyle
+    ##       <int> <chr>            <chr>         <chr>    <chr>      <chr>  <chr>    
+    ## 1         0 0                mazda         diesel   std        four   sedan    
+    ## 2         0 93               mercedes-benz diesel   turbo      four   sedan    
+    ## 3         0 94               volkswagen    diesel   std        four   sedan    
+    ## 4         0 93               mercedes-benz diesel   turbo      two    hardtop  
+    ## 5         0 95               volvo         diesel   turbo      four   sedan    
+    ## 6         0 91               toyota        diesel   std        four   hatchback
+    ## # ℹ 22 more variables: driveWheels <chr>, engineLocation <chr>,
+    ## #   wheelBase <dbl>, length <dbl>, width <dbl>, height <dbl>, curbWeight <int>,
+    ## #   engineType <chr>, nCylinders <chr>, engineSize <int>, fuelSystem <chr>,
+    ## #   bore <chr>, stroke <chr>, `compression-ratio` <dbl>, horsepower <chr>,
+    ## #   peakRpm <chr>, cityMpg <int>, highwayMpg <int>, price <dbl>,
+    ## #   equalFrequency <bins>, equalWidth <bins>, tamaño_muestra <dbl>
+
+### (c) Use the table() function to inspect the distribution of values in each of the two samples above
+
+``` r
+table(sample_60_percent$fuelType)
+```
+
+    ## 
+    ## diesel    gas 
+    ##      8    115
+
+``` r
+table(muestra_estratificada$fuelType)
+```
+
+    ## 
+    ## diesel    gas 
+    ##     12    111

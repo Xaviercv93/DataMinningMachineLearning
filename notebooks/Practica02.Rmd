@@ -269,4 +269,51 @@ cat("Niveles de equalFrequency: ", levels(newCarInsuranceFInal$equalFrequency), 
 cat("Niveles de equalWidth: ", levels(newCarInsuranceFInal$equalWidth), "\n")
 
 ```
+## 3. With the seed 111019 obtain the following samples on the car insurance data set.
+### Tip: use the function sample_frac().
+### (a) A random sample of 60% of the cases, with replacement
+```{r}
+set.seed(111019)
+
+sample_60_percent <- newCarInsuranceFInal %>%
+  sample_frac(0.6, replace = TRUE)
+
+head(sample_60_percent)
+
+```
+
+### (b) A stratified sample of 60% of the cases of cars, according to the fuelType attribute.
+```{r}
+
+set.seed(111019)  # Establece la semilla para reproducibilidad
+
+
+# Calcula el tamaño de la muestra para cada categoría de fuelType
+tamaños_muestra <- newCarInsuranceFInal %>%
+  group_by(fuelType) %>%
+  summarise(tamaño_muestra = round(n() * 0.6))
+
+# Obtiene la muestra estratificada
+muestra_estratificada <- newCarInsuranceFInal %>%
+  inner_join(tamaños_muestra, by = "fuelType") %>%
+  group_by(fuelType) %>%
+  sample_frac(size = 0.6, replace = FALSE)
+
+# Muestra los primeros casos de la muestra estratificada
+head(muestra_estratificada)
+
+
+```
+
+### (c) Use the table() function to inspect the distribution of values in each of the two samples above
+```{r}
+
+table(sample_60_percent$fuelType)
+
+
+table(muestra_estratificada$fuelType)
+
+
+
+```
 
