@@ -800,4 +800,54 @@ corrplot(corMatrix, p.mat = testRes$p, sig.level = 0.10,
          addCoef.col ='black', order = 'hclust', addrect = 2,tl.cex = 0.9, number.cex = 0.5)
 ```
 
-![](Practica02_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](Practica02_files/figure-gfm/unnamed-chunk-18-1.png)<!-- --> \### (c)
+Plot the all correlation information using the function corrplot.
+Explore some of its parameters.
+
+``` r
+# Cargar el paquete corrplot
+library(corrplot)
+
+
+
+# Visualizar la matriz de correlación utilizando diferentes métodos
+# Método: Números
+corrplot(corMatrix, method = 'number', order = 'AOE', diag = FALSE,tl.cex = 0.9, number.cex = 0.5)
+```
+
+![](Practica02_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+``` r
+# Método: Círculos
+corrplot(corMatrix, method = 'circle', order = 'AOE', diag = FALSE,tl.cex = 0.9, number.cex = 0.5)
+```
+
+![](Practica02_files/figure-gfm/unnamed-chunk-19-2.png)<!-- -->
+
+``` r
+# Método: Sombreado
+corrplot(corMatrix, method = 'shade', order = 'AOE', diag = FALSE,tl.cex = 0.9, number.cex = 0.5)
+```
+
+![](Practica02_files/figure-gfm/unnamed-chunk-19-3.png)<!-- -->
+
+``` r
+# Método: Gráficos de pastel
+corrplot(corMatrix, method = 'pie', order = 'AOE', diag = FALSE,tl.cex = 0.9, number.cex = 0.5)
+```
+
+![](Practica02_files/figure-gfm/unnamed-chunk-19-4.png)<!-- -->
+
+``` r
+# Método: Sombreado (parte inferior) y gráficos de pastel (parte superior)
+corrplot(corMatrix, method = 'shade', order = 'AOE', type = 'lower', diag = FALSE,tl.cex = 0.9, number.cex = 0.5)
+```
+
+![](Practica02_files/figure-gfm/unnamed-chunk-19-5.png)<!-- -->
+
+``` r
+# Método mixto: Sombreado (parte inferior) y gráficos de pastel (parte superior)
+corrplot.mixed(corMatrix, lower = 'shade', upper = 'pie', order = 'hclust',tl.cex = 0.9, number.cex = 0.5)
+```
+
+![](Practica02_files/figure-gfm/unnamed-chunk-19-6.png)<!-- -->

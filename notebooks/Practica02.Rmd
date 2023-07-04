@@ -406,3 +406,26 @@ corrplot(corMatrix, p.mat = testRes$p, sig.level = 0.10,
 
 
 ```
+### (c) Plot the all correlation information using the function corrplot. Explore some of its parameters.
+```{r}
+# Cargar el paquete corrplot
+library(corrplot)
+
+
+
+# Visualizar la matriz de correlación utilizando diferentes métodos
+# Método: Números
+corrplot(corMatrix, method = 'number', order = 'AOE', diag = FALSE,tl.cex = 0.9, number.cex = 0.5)
+# Método: Círculos
+corrplot(corMatrix, method = 'circle', order = 'AOE', diag = FALSE,tl.cex = 0.9, number.cex = 0.5)
+# Método: Sombreado
+corrplot(corMatrix, method = 'shade', order = 'AOE', diag = FALSE,tl.cex = 0.9, number.cex = 0.5)
+# Método: Gráficos de pastel
+corrplot(corMatrix, method = 'pie', order = 'AOE', diag = FALSE,tl.cex = 0.9, number.cex = 0.5)
+# Método: Sombreado (parte inferior) y gráficos de pastel (parte superior)
+corrplot(corMatrix, method = 'shade', order = 'AOE', type = 'lower', diag = FALSE,tl.cex = 0.9, number.cex = 0.5)
+# Método mixto: Sombreado (parte inferior) y gráficos de pastel (parte superior)
+corrplot.mixed(corMatrix, lower = 'shade', upper = 'pie', order = 'hclust',tl.cex = 0.9, number.cex = 0.5)
+
+
+```
