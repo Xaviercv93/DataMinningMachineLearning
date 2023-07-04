@@ -851,3 +851,66 @@ corrplot.mixed(corMatrix, lower = 'shade', upper = 'pie', order = 'hclust',tl.ce
 ```
 
 ![](Practica02_files/figure-gfm/unnamed-chunk-19-6.png)<!-- -->
+
+## 5. Load the data set USJudgeRatings, from the datasets package, containing lawyers’ ratings of state judges in the US Superior Court regarding a set of attributes.
+
+### (a) Apply the function prcomp() to obtain the principal components. Inspect how each variable is obtained by the linear combination of each component.
+
+``` r
+# Cargar el conjunto de datos USJudgeRatings
+data(USJudgeRatings)
+
+head(USJudgeRatings,10)
+```
+
+    ##                CONT INTG DMNR DILG CFMG DECI PREP FAMI ORAL WRIT PHYS RTEN
+    ## AARONSON,L.H.   5.7  7.9  7.7  7.3  7.1  7.4  7.1  7.1  7.1  7.0  8.3  7.8
+    ## ALEXANDER,J.M.  6.8  8.9  8.8  8.5  7.8  8.1  8.0  8.0  7.8  7.9  8.5  8.7
+    ## ARMENTANO,A.J.  7.2  8.1  7.8  7.8  7.5  7.6  7.5  7.5  7.3  7.4  7.9  7.8
+    ## BERDON,R.I.     6.8  8.8  8.5  8.8  8.3  8.5  8.7  8.7  8.4  8.5  8.8  8.7
+    ## BRACKEN,J.J.    7.3  6.4  4.3  6.5  6.0  6.2  5.7  5.7  5.1  5.3  5.5  4.8
+    ## BURNS,E.B.      6.2  8.8  8.7  8.5  7.9  8.0  8.1  8.0  8.0  8.0  8.6  8.6
+    ## CALLAHAN,R.J.  10.6  9.0  8.9  8.7  8.5  8.5  8.5  8.5  8.6  8.4  9.1  9.0
+    ## COHEN,S.S.      7.0  5.9  4.9  5.1  5.4  5.9  4.8  5.1  4.7  4.9  6.8  5.0
+    ## DALY,J.J.       7.3  8.9  8.9  8.7  8.6  8.5  8.4  8.4  8.4  8.5  8.8  8.8
+    ## DANNEHY,J.F.    8.2  7.9  6.7  8.1  7.9  8.0  7.9  8.1  7.7  7.8  8.5  7.9
+
+``` r
+# Aplicar la función prcomp() para obtener los componentes principales
+pca <- prcomp(USJudgeRatings)
+
+# Inspeccionar cómo cada variable se obtiene mediante la combinación lineal de cada componente
+var_weights <- pca$rotation
+
+# Visualizar los pesos de cada variable en cada componente
+print(var_weights)
+```
+
+    ##              PC1          PC2         PC3          PC4         PC5          PC6
+    ## CONT  0.00599117  0.933248839 -0.31985402  0.112932711  0.09462326 -0.002863094
+    ## INTG -0.23476045 -0.138724061 -0.36981582  0.252211159  0.04590748 -0.463156453
+    ## DMNR -0.34774394 -0.232070496 -0.66343490  0.034666432 -0.19413671  0.360824575
+    ## DILG -0.28678321  0.047953743  0.22433991  0.272806418 -0.37555702 -0.563858944
+    ## CFMG -0.27201855  0.163199298  0.18935451 -0.024818035 -0.47964024  0.169861226
+    ## DECI -0.25330240  0.117624159  0.24920335 -0.024620949 -0.42029465  0.368776968
+    ## PREP -0.30910791  0.047023458  0.21702209  0.191109898  0.14553660 -0.063861767
+    ## FAMI -0.30510111  0.014033493  0.26692334  0.168833090  0.47073965  0.107554568
+    ## ORAL -0.33195277  0.009669279  0.03718715  0.007519155  0.25286574  0.141530777
+    ## WRIT -0.31396635 -0.018092578  0.11487882  0.141585317  0.29475017  0.227041086
+    ## PHYS -0.27750639  0.096014861  0.03603598 -0.859239241  0.09522754 -0.241473592
+    ## RTEN -0.35932337 -0.033595756 -0.19563408 -0.152859043  0.02899495 -0.164203864
+    ##               PC7          PC8         PC9        PC10        PC11         PC12
+    ## CONT  0.017715828  0.049191638 -0.03452922 -0.02698275  0.01671326  0.007431325
+    ## INTG -0.365508583 -0.417669580 -0.37748813  0.18025018 -0.15992927 -0.006194162
+    ## DMNR  0.394379189  0.167204881 -0.12329552 -0.03720489  0.11310307 -0.055818131
+    ## DILG  0.255305398  0.282668734 -0.02924283 -0.41571794  0.09706351 -0.059529611
+    ## CFMG  0.108985626 -0.680468974  0.26897827  0.13173613  0.19431559 -0.040188043
+    ## DECI -0.482835530  0.317726213 -0.40752158  0.09720424 -0.18697238 -0.045701668
+    ## PREP  0.383738578  0.169372297  0.07226971  0.64066551 -0.34000143  0.293499296
+    ## FAMI  0.024308258  0.005991298 -0.22947394  0.12291413  0.53543928 -0.467666232
+    ## ORAL -0.007364589 -0.116735981  0.27199080 -0.35542800 -0.63676735 -0.429930400
+    ## WRIT -0.102306863 -0.141542794 -0.06726958 -0.43503830  0.10601295  0.702784185
+    ## PHYS  0.158736876 -0.046966945 -0.27452313 -0.02638736 -0.01173895  0.056591229
+    ## RTEN -0.465619269  0.294439861  0.62456547  0.15469084  0.24508578  0.052358190
+
+### (b) Load the package ggbiplot and plot the two first components with the function ggbiplot(). You can label each point with the lawyer’s name by setting the labels parameter.

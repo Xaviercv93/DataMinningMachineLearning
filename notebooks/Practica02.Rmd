@@ -429,3 +429,27 @@ corrplot.mixed(corMatrix, lower = 'shade', upper = 'pie', order = 'hclust',tl.ce
 
 
 ```
+
+## 5. Load the data set USJudgeRatings, from the datasets package, containing lawyers’ ratings of state judges in the US Superior Court regarding a set of attributes.
+### (a) Apply the function prcomp() to obtain the principal components. Inspect how each variable is obtained by the linear combination of each component.
+
+```{r}
+# Cargar el conjunto de datos USJudgeRatings
+data(USJudgeRatings)
+
+head(USJudgeRatings,10)
+
+# Aplicar la función prcomp() para obtener los componentes principales
+pca <- prcomp(USJudgeRatings)
+
+# Inspeccionar cómo cada variable se obtiene mediante la combinación lineal de cada componente
+var_weights <- pca$rotation
+
+# Visualizar los pesos de cada variable en cada componente
+print(var_weights)
+
+```
+### (b) Load the package ggbiplot and plot the two first components with the function ggbiplot(). You can label each point with the lawyer’s name by setting the labels parameter.
+```{r}
+
+```
