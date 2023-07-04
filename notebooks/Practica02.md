@@ -72,70 +72,76 @@ library(ggplot2)
 ### Load the carInsurance data set about the insurance risk rating of cars based on several characteristics of each car
 
 ``` r
-#lee archivo csv, se indica que no contiene fila de encabezado
-data <- read.csv('../data/02_data/carInsurance.data', header=FALSE)
-
-#reemplaza valores ? por NA
-data[data == "?"] <- NA
-
-#crea un dataframe llamado carInsurance
-#se usa el objeto data como argumento para la funcion data.frame()
-carInsurance <- data.frame(data)
-
-# vector de nombres de encabezado para el dataframe
-header <- c("symboling","normalizedLosses","make","fuelType","aspiration","nDoors","bodyStyle","driveWheels","engineLocation","wheelBase","length","width","height","curbWeight","engineType","nCylinders","engineSize","fuelSystem","bore","stroke","compression-ratio","horsepower","peakRpm","cityMpg","highwayMpg","price")
-
-# Establecer el encabezado al dataframe
-names(carInsurance) <- header
-
-#imprimir el dataframe, solo 10 filas
-head(carInsurance,10)
+load("../data/02_data/carInsurance.Rdata") 
+carIns
 ```
 
-    ##    symboling normalizedLosses        make fuelType aspiration nDoors
-    ## 1          3             <NA> alfa-romero      gas        std    two
-    ## 2          3             <NA> alfa-romero      gas        std    two
-    ## 3          1             <NA> alfa-romero      gas        std    two
-    ## 4          2              164        audi      gas        std   four
-    ## 5          2              164        audi      gas        std   four
-    ## 6          2             <NA>        audi      gas        std    two
-    ## 7          1              158        audi      gas        std   four
-    ## 8          1             <NA>        audi      gas        std   four
-    ## 9          1              158        audi      gas      turbo   four
-    ## 10         0             <NA>        audi      gas      turbo    two
-    ##      bodyStyle driveWheels engineLocation wheelBase length width height
-    ## 1  convertible         rwd          front      88.6  168.8  64.1   48.8
-    ## 2  convertible         rwd          front      88.6  168.8  64.1   48.8
-    ## 3    hatchback         rwd          front      94.5  171.2  65.5   52.4
-    ## 4        sedan         fwd          front      99.8  176.6  66.2   54.3
-    ## 5        sedan         4wd          front      99.4  176.6  66.4   54.3
-    ## 6        sedan         fwd          front      99.8  177.3  66.3   53.1
-    ## 7        sedan         fwd          front     105.8  192.7  71.4   55.7
-    ## 8        wagon         fwd          front     105.8  192.7  71.4   55.7
-    ## 9        sedan         fwd          front     105.8  192.7  71.4   55.9
-    ## 10   hatchback         4wd          front      99.5  178.2  67.9   52.0
-    ##    curbWeight engineType nCylinders engineSize fuelSystem bore stroke
-    ## 1        2548       dohc       four        130       mpfi 3.47   2.68
-    ## 2        2548       dohc       four        130       mpfi 3.47   2.68
-    ## 3        2823       ohcv        six        152       mpfi 2.68   3.47
-    ## 4        2337        ohc       four        109       mpfi 3.19   3.40
-    ## 5        2824        ohc       five        136       mpfi 3.19   3.40
-    ## 6        2507        ohc       five        136       mpfi 3.19   3.40
-    ## 7        2844        ohc       five        136       mpfi 3.19   3.40
-    ## 8        2954        ohc       five        136       mpfi 3.19   3.40
-    ## 9        3086        ohc       five        131       mpfi 3.13   3.40
-    ## 10       3053        ohc       five        131       mpfi 3.13   3.40
-    ##    compression-ratio horsepower peakRpm cityMpg highwayMpg price
-    ## 1                9.0        111    5000      21         27 13495
-    ## 2                9.0        111    5000      21         27 16500
-    ## 3                9.0        154    5000      19         26 16500
-    ## 4               10.0        102    5500      24         30 13950
-    ## 5                8.0        115    5500      18         22 17450
-    ## 6                8.5        110    5500      19         25 15250
-    ## 7                8.5        110    5500      19         25 17710
-    ## 8                8.5        110    5500      19         25 18920
-    ## 9                8.3        140    5500      17         20 23875
-    ## 10               7.0        160    5500      16         22  <NA>
+    ## # A tibble: 205 × 26
+    ##     symb normLoss make        fuelType aspiration nDoors bodyStyle   driveWheels
+    ##    <int>    <int> <fct>       <fct>    <fct>      <fct>  <fct>       <fct>      
+    ##  1     3       NA alfa-romero gas      std        two    convertible rwd        
+    ##  2     3       NA alfa-romero gas      std        two    convertible rwd        
+    ##  3     1       NA alfa-romero gas      std        two    hatchback   rwd        
+    ##  4     2      164 audi        gas      std        four   sedan       fwd        
+    ##  5     2      164 audi        gas      std        four   sedan       4wd        
+    ##  6     2       NA audi        gas      std        two    sedan       fwd        
+    ##  7     1      158 audi        gas      std        four   sedan       fwd        
+    ##  8     1       NA audi        gas      std        four   wagon       fwd        
+    ##  9     1      158 audi        gas      turbo      four   sedan       fwd        
+    ## 10     0       NA audi        gas      turbo      two    hatchback   4wd        
+    ## # ℹ 195 more rows
+    ## # ℹ 18 more variables: engineLocation <fct>, wheelBase <dbl>, length <dbl>,
+    ## #   width <dbl>, height <dbl>, curbWeight <int>, engineType <fct>,
+    ## #   nrCylinds <fct>, engineSize <int>, fuelSystem <fct>, bore <dbl>,
+    ## #   stroke <dbl>, compressionRatio <dbl>, horsePower <int>, peakRpm <int>,
+    ## #   cityMpg <int>, highwayMpg <int>, price <int>
+
+``` r
+carInsurance <- carIns
+head(carInsurance, 10)
+```
+
+    ## # A tibble: 10 × 26
+    ##     symb normLoss make        fuelType aspiration nDoors bodyStyle   driveWheels
+    ##    <int>    <int> <fct>       <fct>    <fct>      <fct>  <fct>       <fct>      
+    ##  1     3       NA alfa-romero gas      std        two    convertible rwd        
+    ##  2     3       NA alfa-romero gas      std        two    convertible rwd        
+    ##  3     1       NA alfa-romero gas      std        two    hatchback   rwd        
+    ##  4     2      164 audi        gas      std        four   sedan       fwd        
+    ##  5     2      164 audi        gas      std        four   sedan       4wd        
+    ##  6     2       NA audi        gas      std        two    sedan       fwd        
+    ##  7     1      158 audi        gas      std        four   sedan       fwd        
+    ##  8     1       NA audi        gas      std        four   wagon       fwd        
+    ##  9     1      158 audi        gas      turbo      four   sedan       fwd        
+    ## 10     0       NA audi        gas      turbo      two    hatchback   4wd        
+    ## # ℹ 18 more variables: engineLocation <fct>, wheelBase <dbl>, length <dbl>,
+    ## #   width <dbl>, height <dbl>, curbWeight <int>, engineType <fct>,
+    ## #   nrCylinds <fct>, engineSize <int>, fuelSystem <fct>, bore <dbl>,
+    ## #   stroke <dbl>, compressionRatio <dbl>, horsePower <int>, peakRpm <int>,
+    ## #   cityMpg <int>, highwayMpg <int>, price <int>
+
+``` r
+# #lee archivo csv, se indica que no contiene fila de encabezado
+# data <- read.csv('../data/02_data/carInsurance.data', header=FALSE)
+# 
+# #reemplaza valores ? por NA
+# data[data == "?"] <- NA
+# 
+# #crea un dataframe llamado carInsurance
+# #se usa el objeto data como argumento para la funcion data.frame()
+# carInsurance <- data.frame(data)
+# 
+# # vector de nombres de encabezado para el dataframe
+# header <- c("symboling","normalizedLosses","make","fuelType","aspiration","nDoors","bodyStyle","driveWheels","engineLocation","wheelBase","length","width","height","curbWeight","engineType","nCylinders","engineSize","fuelSystem","bore","stroke","compression-ratio","horsepower","peakRpm","cityMpg","highwayMpg","price")
+# 
+# # Establecer el encabezado al dataframe
+# names(carInsurance) <- header
+# 
+# 
+# 
+# # Imprimir el dataframe, solo 10 filas
+# head(carInsurance, 10)
+```
 
 ### (a) Check if there are any missing values.
 
@@ -146,8 +152,8 @@ nombres_columnas_valores_faltantes <- names(columnas_valores_faltantes[columnas_
 nombres_columnas_valores_faltantes
 ```
 
-    ## [1] "normalizedLosses" "nDoors"           "bore"             "stroke"          
-    ## [5] "horsepower"       "peakRpm"          "price"
+    ## [1] "normLoss"   "nDoors"     "bore"       "stroke"     "horsePower"
+    ## [6] "peakRpm"    "price"
 
 ``` r
 valores_faltantes <- any_na(carInsurance)
@@ -178,8 +184,10 @@ typeof(num_valores_faltantes)
 print(num_valores_faltantes)
 ```
 
-    ##     n
-    ## 1 159
+    ## # A tibble: 1 × 1
+    ##       n
+    ##   <int>
+    ## 1   159
 
 ### (c) Create a new data set by removing all the cases that have missing values.
 
@@ -190,50 +198,24 @@ carInsurance_sin_NA <- drop_rows_any_na(carInsurance)
 head(carInsurance_sin_NA,10)
 ```
 
-    ##    symboling normalizedLosses      make fuelType aspiration nDoors bodyStyle
-    ## 4          2              164      audi      gas        std   four     sedan
-    ## 5          2              164      audi      gas        std   four     sedan
-    ## 7          1              158      audi      gas        std   four     sedan
-    ## 9          1              158      audi      gas      turbo   four     sedan
-    ## 11         2              192       bmw      gas        std    two     sedan
-    ## 12         0              192       bmw      gas        std   four     sedan
-    ## 13         0              188       bmw      gas        std    two     sedan
-    ## 14         0              188       bmw      gas        std   four     sedan
-    ## 19         2              121 chevrolet      gas        std    two hatchback
-    ## 20         1               98 chevrolet      gas        std    two hatchback
-    ##    driveWheels engineLocation wheelBase length width height curbWeight
-    ## 4          fwd          front      99.8  176.6  66.2   54.3       2337
-    ## 5          4wd          front      99.4  176.6  66.4   54.3       2824
-    ## 7          fwd          front     105.8  192.7  71.4   55.7       2844
-    ## 9          fwd          front     105.8  192.7  71.4   55.9       3086
-    ## 11         rwd          front     101.2  176.8  64.8   54.3       2395
-    ## 12         rwd          front     101.2  176.8  64.8   54.3       2395
-    ## 13         rwd          front     101.2  176.8  64.8   54.3       2710
-    ## 14         rwd          front     101.2  176.8  64.8   54.3       2765
-    ## 19         fwd          front      88.4  141.1  60.3   53.2       1488
-    ## 20         fwd          front      94.5  155.9  63.6   52.0       1874
-    ##    engineType nCylinders engineSize fuelSystem bore stroke compression-ratio
-    ## 4         ohc       four        109       mpfi 3.19   3.40              10.0
-    ## 5         ohc       five        136       mpfi 3.19   3.40               8.0
-    ## 7         ohc       five        136       mpfi 3.19   3.40               8.5
-    ## 9         ohc       five        131       mpfi 3.13   3.40               8.3
-    ## 11        ohc       four        108       mpfi 3.50   2.80               8.8
-    ## 12        ohc       four        108       mpfi 3.50   2.80               8.8
-    ## 13        ohc        six        164       mpfi 3.31   3.19               9.0
-    ## 14        ohc        six        164       mpfi 3.31   3.19               9.0
-    ## 19          l      three         61       2bbl 2.91   3.03               9.5
-    ## 20        ohc       four         90       2bbl 3.03   3.11               9.6
-    ##    horsepower peakRpm cityMpg highwayMpg price
-    ## 4         102    5500      24         30 13950
-    ## 5         115    5500      18         22 17450
-    ## 7         110    5500      19         25 17710
-    ## 9         140    5500      17         20 23875
-    ## 11        101    5800      23         29 16430
-    ## 12        101    5800      23         29 16925
-    ## 13        121    4250      21         28 20970
-    ## 14        121    4250      21         28 21105
-    ## 19         48    5100      47         53  5151
-    ## 20         70    5400      38         43  6295
+    ## # A tibble: 10 × 26
+    ##     symb normLoss make      fuelType aspiration nDoors bodyStyle driveWheels
+    ##    <int>    <int> <fct>     <fct>    <fct>      <fct>  <fct>     <fct>      
+    ##  1     2      164 audi      gas      std        four   sedan     fwd        
+    ##  2     2      164 audi      gas      std        four   sedan     4wd        
+    ##  3     1      158 audi      gas      std        four   sedan     fwd        
+    ##  4     1      158 audi      gas      turbo      four   sedan     fwd        
+    ##  5     2      192 bmw       gas      std        two    sedan     rwd        
+    ##  6     0      192 bmw       gas      std        four   sedan     rwd        
+    ##  7     0      188 bmw       gas      std        two    sedan     rwd        
+    ##  8     0      188 bmw       gas      std        four   sedan     rwd        
+    ##  9     2      121 chevrolet gas      std        two    hatchback fwd        
+    ## 10     1       98 chevrolet gas      std        two    hatchback fwd        
+    ## # ℹ 18 more variables: engineLocation <fct>, wheelBase <dbl>, length <dbl>,
+    ## #   width <dbl>, height <dbl>, curbWeight <int>, engineType <fct>,
+    ## #   nrCylinds <fct>, engineSize <int>, fuelSystem <fct>, bore <dbl>,
+    ## #   stroke <dbl>, compressionRatio <dbl>, horsePower <int>, peakRpm <int>,
+    ## #   cityMpg <int>, highwayMpg <int>, price <int>
 
 ``` r
 #count(carInsurance_sin_NA)
@@ -248,53 +230,37 @@ carInsuranceImpute <- carInsurance %>% impute_zero_all()
 # Reemplazar los valores NA por ceros en todas las columnas
 #carInsuranceImpute <- impute_zero_all(carInsuranceImpute)
 
-head(carInsuranceImpute, 10)
+head(carInsuranceImpute, 20)
 ```
 
-    ##    symboling normalizedLosses        make fuelType aspiration nDoors
-    ## 1          3                0 alfa-romero      gas        std    two
-    ## 2          3                0 alfa-romero      gas        std    two
-    ## 3          1                0 alfa-romero      gas        std    two
-    ## 4          2              164        audi      gas        std   four
-    ## 5          2              164        audi      gas        std   four
-    ## 6          2                0        audi      gas        std    two
-    ## 7          1              158        audi      gas        std   four
-    ## 8          1                0        audi      gas        std   four
-    ## 9          1              158        audi      gas      turbo   four
-    ## 10         0                0        audi      gas      turbo    two
-    ##      bodyStyle driveWheels engineLocation wheelBase length width height
-    ## 1  convertible         rwd          front      88.6  168.8  64.1   48.8
-    ## 2  convertible         rwd          front      88.6  168.8  64.1   48.8
-    ## 3    hatchback         rwd          front      94.5  171.2  65.5   52.4
-    ## 4        sedan         fwd          front      99.8  176.6  66.2   54.3
-    ## 5        sedan         4wd          front      99.4  176.6  66.4   54.3
-    ## 6        sedan         fwd          front      99.8  177.3  66.3   53.1
-    ## 7        sedan         fwd          front     105.8  192.7  71.4   55.7
-    ## 8        wagon         fwd          front     105.8  192.7  71.4   55.7
-    ## 9        sedan         fwd          front     105.8  192.7  71.4   55.9
-    ## 10   hatchback         4wd          front      99.5  178.2  67.9   52.0
-    ##    curbWeight engineType nCylinders engineSize fuelSystem bore stroke
-    ## 1        2548       dohc       four        130       mpfi 3.47   2.68
-    ## 2        2548       dohc       four        130       mpfi 3.47   2.68
-    ## 3        2823       ohcv        six        152       mpfi 2.68   3.47
-    ## 4        2337        ohc       four        109       mpfi 3.19   3.40
-    ## 5        2824        ohc       five        136       mpfi 3.19   3.40
-    ## 6        2507        ohc       five        136       mpfi 3.19   3.40
-    ## 7        2844        ohc       five        136       mpfi 3.19   3.40
-    ## 8        2954        ohc       five        136       mpfi 3.19   3.40
-    ## 9        3086        ohc       five        131       mpfi 3.13   3.40
-    ## 10       3053        ohc       five        131       mpfi 3.13   3.40
-    ##    compression-ratio horsepower peakRpm cityMpg highwayMpg price
-    ## 1                9.0        111    5000      21         27 13495
-    ## 2                9.0        111    5000      21         27 16500
-    ## 3                9.0        154    5000      19         26 16500
-    ## 4               10.0        102    5500      24         30 13950
-    ## 5                8.0        115    5500      18         22 17450
-    ## 6                8.5        110    5500      19         25 15250
-    ## 7                8.5        110    5500      19         25 17710
-    ## 8                8.5        110    5500      19         25 18920
-    ## 9                8.3        140    5500      17         20 23875
-    ## 10               7.0        160    5500      16         22     0
+    ## # A tibble: 20 × 26
+    ##     symb normLoss make        fuelType aspiration nDoors bodyStyle   driveWheels
+    ##    <int>    <int> <fct>       <fct>    <fct>      <fct>  <fct>       <fct>      
+    ##  1     3        0 alfa-romero gas      std        two    convertible rwd        
+    ##  2     3        0 alfa-romero gas      std        two    convertible rwd        
+    ##  3     1        0 alfa-romero gas      std        two    hatchback   rwd        
+    ##  4     2      164 audi        gas      std        four   sedan       fwd        
+    ##  5     2      164 audi        gas      std        four   sedan       4wd        
+    ##  6     2        0 audi        gas      std        two    sedan       fwd        
+    ##  7     1      158 audi        gas      std        four   sedan       fwd        
+    ##  8     1        0 audi        gas      std        four   wagon       fwd        
+    ##  9     1      158 audi        gas      turbo      four   sedan       fwd        
+    ## 10     0        0 audi        gas      turbo      two    hatchback   4wd        
+    ## 11     2      192 bmw         gas      std        two    sedan       rwd        
+    ## 12     0      192 bmw         gas      std        four   sedan       rwd        
+    ## 13     0      188 bmw         gas      std        two    sedan       rwd        
+    ## 14     0      188 bmw         gas      std        four   sedan       rwd        
+    ## 15     1        0 bmw         gas      std        four   sedan       rwd        
+    ## 16     0        0 bmw         gas      std        four   sedan       rwd        
+    ## 17     0        0 bmw         gas      std        two    sedan       rwd        
+    ## 18     0        0 bmw         gas      std        four   sedan       rwd        
+    ## 19     2      121 chevrolet   gas      std        two    hatchback   fwd        
+    ## 20     1       98 chevrolet   gas      std        two    hatchback   fwd        
+    ## # ℹ 18 more variables: engineLocation <fct>, wheelBase <dbl>, length <dbl>,
+    ## #   width <dbl>, height <dbl>, curbWeight <int>, engineType <fct>,
+    ## #   nrCylinds <fct>, engineSize <int>, fuelSystem <fct>, bore <dbl>,
+    ## #   stroke <dbl>, compressionRatio <dbl>, horsePower <int>, peakRpm <int>,
+    ## #   cityMpg <int>, highwayMpg <int>, price <int>
 
 ``` r
 #count(carInsuranceImpute)
@@ -304,7 +270,7 @@ head(carInsuranceImpute, 10)
 
 ``` r
 # Identificar columnas con valores de tipo double
-columnas_double <- sapply(carInsuranceImpute, is.double)
+columnas_double <- sapply(carInsurance, is.double)
 
 #nombre de las columnas_double
 nombres_columnas_double <- names(columnas_double[columnas_double])
@@ -312,69 +278,48 @@ nombres_columnas_double <- names(columnas_double[columnas_double])
 #typeof(nombres_columnas_double)
 
 # Calcular la media de cada columna
-media <- colMeans(carInsuranceImpute[,nombres_columnas_double])
+media <- colMeans(carInsurance[,nombres_columnas_double], na.rm = TRUE)
 media
 ```
 
-    ##         wheelBase            length             width            height 
-    ##          98.75659         174.04927          65.90780          53.72488 
-    ## compression-ratio 
-    ##          10.14254
+    ##        wheelBase           length            width           height 
+    ##        98.756585       174.049268        65.907805        53.724878 
+    ##             bore           stroke compressionRatio 
+    ##         3.329751         3.255423        10.142537
 
 ``` r
 # Crear un nuevo conjunto de datos imputando la media en las columnas correspondientes
-carInsuranceMean <- carInsuranceImpute
+carInsuranceMean <- carInsurance
 
 for (col in nombres_columnas_double) {
-  carInsuranceMean[[col]] <- media[col]
+  carInsuranceMean[[col]][is.na(carInsuranceMean[[col]])] <- media[col] 
 }
-head(carInsuranceMean, 10)
+head(carInsurance[, sapply(carInsurance, is.double)])
 ```
 
-    ##    symboling normalizedLosses        make fuelType aspiration nDoors
-    ## 1          3                0 alfa-romero      gas        std    two
-    ## 2          3                0 alfa-romero      gas        std    two
-    ## 3          1                0 alfa-romero      gas        std    two
-    ## 4          2              164        audi      gas        std   four
-    ## 5          2              164        audi      gas        std   four
-    ## 6          2                0        audi      gas        std    two
-    ## 7          1              158        audi      gas        std   four
-    ## 8          1                0        audi      gas        std   four
-    ## 9          1              158        audi      gas      turbo   four
-    ## 10         0                0        audi      gas      turbo    two
-    ##      bodyStyle driveWheels engineLocation wheelBase   length   width   height
-    ## 1  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 2  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 3    hatchback         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 4        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 5        sedan         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ## 6        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 7        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 8        wagon         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 9        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 10   hatchback         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ##    curbWeight engineType nCylinders engineSize fuelSystem bore stroke
-    ## 1        2548       dohc       four        130       mpfi 3.47   2.68
-    ## 2        2548       dohc       four        130       mpfi 3.47   2.68
-    ## 3        2823       ohcv        six        152       mpfi 2.68   3.47
-    ## 4        2337        ohc       four        109       mpfi 3.19   3.40
-    ## 5        2824        ohc       five        136       mpfi 3.19   3.40
-    ## 6        2507        ohc       five        136       mpfi 3.19   3.40
-    ## 7        2844        ohc       five        136       mpfi 3.19   3.40
-    ## 8        2954        ohc       five        136       mpfi 3.19   3.40
-    ## 9        3086        ohc       five        131       mpfi 3.13   3.40
-    ## 10       3053        ohc       five        131       mpfi 3.13   3.40
-    ##    compression-ratio horsepower peakRpm cityMpg highwayMpg price
-    ## 1           10.14254        111    5000      21         27 13495
-    ## 2           10.14254        111    5000      21         27 16500
-    ## 3           10.14254        154    5000      19         26 16500
-    ## 4           10.14254        102    5500      24         30 13950
-    ## 5           10.14254        115    5500      18         22 17450
-    ## 6           10.14254        110    5500      19         25 15250
-    ## 7           10.14254        110    5500      19         25 17710
-    ## 8           10.14254        110    5500      19         25 18920
-    ## 9           10.14254        140    5500      17         20 23875
-    ## 10          10.14254        160    5500      16         22     0
+    ## # A tibble: 6 × 7
+    ##   wheelBase length width height  bore stroke compressionRatio
+    ##       <dbl>  <dbl> <dbl>  <dbl> <dbl>  <dbl>            <dbl>
+    ## 1      88.6   169.  64.1   48.8  3.47   2.68              9  
+    ## 2      88.6   169.  64.1   48.8  3.47   2.68              9  
+    ## 3      94.5   171.  65.5   52.4  2.68   3.47              9  
+    ## 4      99.8   177.  66.2   54.3  3.19   3.4              10  
+    ## 5      99.4   177.  66.4   54.3  3.19   3.4               8  
+    ## 6      99.8   177.  66.3   53.1  3.19   3.4               8.5
+
+``` r
+head(carInsuranceMean[, sapply(carInsuranceMean, is.double)])
+```
+
+    ## # A tibble: 6 × 7
+    ##   wheelBase length width height  bore stroke compressionRatio
+    ##       <dbl>  <dbl> <dbl>  <dbl> <dbl>  <dbl>            <dbl>
+    ## 1      88.6   169.  64.1   48.8  3.47   2.68              9  
+    ## 2      88.6   169.  64.1   48.8  3.47   2.68              9  
+    ## 3      94.5   171.  65.5   52.4  2.68   3.47              9  
+    ## 4      99.8   177.  66.2   54.3  3.19   3.4              10  
+    ## 5      99.4   177.  66.4   54.3  3.19   3.4               8  
+    ## 6      99.8   177.  66.3   53.1  3.19   3.4               8.5
 
 ### (f) Create a new data set by imputing the mode in all the columns which have integer type values.
 
@@ -384,6 +329,31 @@ library(modeest)
 ```
 
     ## Warning: package 'modeest' was built under R version 4.3.1
+
+``` r
+columnas_valores_faltantes <- colSums(is.na(carInsuranceMean))>0
+#head(columnas_valores_faltantes,10)
+nombres_columnas_valores_faltantes <- names(columnas_valores_faltantes[columnas_valores_faltantes])
+print(nombres_columnas_valores_faltantes)
+```
+
+    ## [1] "normLoss"   "nDoors"     "horsePower" "peakRpm"    "price"
+
+``` r
+valores_faltantes <- any_na(carInsuranceMean)
+
+#valores_faltantes
+
+if (valores_faltantes) {
+  print("Faltan valores en el conjunto de datos.")
+
+} else {
+  print("No hay valores faltantes en el conjunto de datos.")
+
+}
+```
+
+    ## [1] "Faltan valores en el conjunto de datos."
 
 ``` r
 #identificar columnas int
@@ -417,111 +387,33 @@ moda <- sapply(carInsuranceMean[, nombres_columnas_integer], moda_personalizada)
 moda
 ```
 
-    ##  symboling curbWeight engineSize    cityMpg highwayMpg 
-    ##          0       2385        122         31         25
+    ##       symb   normLoss curbWeight engineSize horsePower    peakRpm    cityMpg 
+    ##          0         NA       2385        122         68       5500         31 
+    ## highwayMpg      price 
+    ##         25         NA
 
 ``` r
-# Crear un nuevo conjunto de datos imputando la media en las columnas correspondientes
-carInsuranceMode <- carInsuranceMean 
-head(carInsuranceMode, 10)
-```
+# Crear un nuevo conjunto de datos imputando la moda en las columnas correspondientes
+carInsuranceMode <- carInsuranceMean
 
-    ##    symboling normalizedLosses        make fuelType aspiration nDoors
-    ## 1          3                0 alfa-romero      gas        std    two
-    ## 2          3                0 alfa-romero      gas        std    two
-    ## 3          1                0 alfa-romero      gas        std    two
-    ## 4          2              164        audi      gas        std   four
-    ## 5          2              164        audi      gas        std   four
-    ## 6          2                0        audi      gas        std    two
-    ## 7          1              158        audi      gas        std   four
-    ## 8          1                0        audi      gas        std   four
-    ## 9          1              158        audi      gas      turbo   four
-    ## 10         0                0        audi      gas      turbo    two
-    ##      bodyStyle driveWheels engineLocation wheelBase   length   width   height
-    ## 1  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 2  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 3    hatchback         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 4        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 5        sedan         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ## 6        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 7        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 8        wagon         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 9        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 10   hatchback         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ##    curbWeight engineType nCylinders engineSize fuelSystem bore stroke
-    ## 1        2548       dohc       four        130       mpfi 3.47   2.68
-    ## 2        2548       dohc       four        130       mpfi 3.47   2.68
-    ## 3        2823       ohcv        six        152       mpfi 2.68   3.47
-    ## 4        2337        ohc       four        109       mpfi 3.19   3.40
-    ## 5        2824        ohc       five        136       mpfi 3.19   3.40
-    ## 6        2507        ohc       five        136       mpfi 3.19   3.40
-    ## 7        2844        ohc       five        136       mpfi 3.19   3.40
-    ## 8        2954        ohc       five        136       mpfi 3.19   3.40
-    ## 9        3086        ohc       five        131       mpfi 3.13   3.40
-    ## 10       3053        ohc       five        131       mpfi 3.13   3.40
-    ##    compression-ratio horsepower peakRpm cityMpg highwayMpg price
-    ## 1           10.14254        111    5000      21         27 13495
-    ## 2           10.14254        111    5000      21         27 16500
-    ## 3           10.14254        154    5000      19         26 16500
-    ## 4           10.14254        102    5500      24         30 13950
-    ## 5           10.14254        115    5500      18         22 17450
-    ## 6           10.14254        110    5500      19         25 15250
-    ## 7           10.14254        110    5500      19         25 17710
-    ## 8           10.14254        110    5500      19         25 18920
-    ## 9           10.14254        140    5500      17         20 23875
-    ## 10          10.14254        160    5500      16         22     0
-
-``` r
 for (col in nombres_columnas_integer) {
-  carInsuranceMode[[col]] <- moda[col]
+  valores_faltantes <- is.na(carInsuranceMode[[col]])
+  carInsuranceMode[[col]][valores_faltantes] <- moda[col]
 }
-head(carInsuranceMode, 10)
+
+head(carInsuranceMode[, sapply(carInsuranceMode, is.integer)])
 ```
 
-    ##    symboling normalizedLosses        make fuelType aspiration nDoors
-    ## 1          0                0 alfa-romero      gas        std    two
-    ## 2          0                0 alfa-romero      gas        std    two
-    ## 3          0                0 alfa-romero      gas        std    two
-    ## 4          0              164        audi      gas        std   four
-    ## 5          0              164        audi      gas        std   four
-    ## 6          0                0        audi      gas        std    two
-    ## 7          0              158        audi      gas        std   four
-    ## 8          0                0        audi      gas        std   four
-    ## 9          0              158        audi      gas      turbo   four
-    ## 10         0                0        audi      gas      turbo    two
-    ##      bodyStyle driveWheels engineLocation wheelBase   length   width   height
-    ## 1  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 2  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 3    hatchback         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 4        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 5        sedan         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ## 6        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 7        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 8        wagon         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 9        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 10   hatchback         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ##    curbWeight engineType nCylinders engineSize fuelSystem bore stroke
-    ## 1        2385       dohc       four        122       mpfi 3.47   2.68
-    ## 2        2385       dohc       four        122       mpfi 3.47   2.68
-    ## 3        2385       ohcv        six        122       mpfi 2.68   3.47
-    ## 4        2385        ohc       four        122       mpfi 3.19   3.40
-    ## 5        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 6        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 7        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 8        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 9        2385        ohc       five        122       mpfi 3.13   3.40
-    ## 10       2385        ohc       five        122       mpfi 3.13   3.40
-    ##    compression-ratio horsepower peakRpm cityMpg highwayMpg price
-    ## 1           10.14254        111    5000      31         25 13495
-    ## 2           10.14254        111    5000      31         25 16500
-    ## 3           10.14254        154    5000      31         25 16500
-    ## 4           10.14254        102    5500      31         25 13950
-    ## 5           10.14254        115    5500      31         25 17450
-    ## 6           10.14254        110    5500      31         25 15250
-    ## 7           10.14254        110    5500      31         25 17710
-    ## 8           10.14254        110    5500      31         25 18920
-    ## 9           10.14254        140    5500      31         25 23875
-    ## 10          10.14254        160    5500      31         25     0
+    ## # A tibble: 6 × 9
+    ##    symb normLoss curbWeight engineSize horsePower peakRpm cityMpg highwayMpg
+    ##   <int>    <int>      <int>      <int>      <int>   <int>   <int>      <int>
+    ## 1     3       NA       2548        130        111    5000      21         27
+    ## 2     3       NA       2548        130        111    5000      21         27
+    ## 3     1       NA       2823        152        154    5000      19         26
+    ## 4     2      164       2337        109        102    5500      24         30
+    ## 5     2      164       2824        136        115    5500      18         22
+    ## 6     2       NA       2507        136        110    5500      19         25
+    ## # ℹ 1 more variable: price <int>
 
 ### (g) Create a new data set by imputing the most frequent value to the column ”nDoors”.
 
@@ -537,61 +429,35 @@ nDoorsMode
 ``` r
 carInsurancenDoorsMode <- carInsuranceMode %>%
   mutate(nDoors = impute_replace_all(nDoors, nDoorsMode))
-head(carInsurancenDoorsMode, 10)
+head(carInsurancenDoorsMode)
 ```
 
-    ##    symboling normalizedLosses        make fuelType aspiration nDoors
-    ## 1          0                0 alfa-romero      gas        std    two
-    ## 2          0                0 alfa-romero      gas        std    two
-    ## 3          0                0 alfa-romero      gas        std    two
-    ## 4          0              164        audi      gas        std   four
-    ## 5          0              164        audi      gas        std   four
-    ## 6          0                0        audi      gas        std    two
-    ## 7          0              158        audi      gas        std   four
-    ## 8          0                0        audi      gas        std   four
-    ## 9          0              158        audi      gas      turbo   four
-    ## 10         0                0        audi      gas      turbo    two
-    ##      bodyStyle driveWheels engineLocation wheelBase   length   width   height
-    ## 1  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 2  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 3    hatchback         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 4        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 5        sedan         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ## 6        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 7        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 8        wagon         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 9        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 10   hatchback         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ##    curbWeight engineType nCylinders engineSize fuelSystem bore stroke
-    ## 1        2385       dohc       four        122       mpfi 3.47   2.68
-    ## 2        2385       dohc       four        122       mpfi 3.47   2.68
-    ## 3        2385       ohcv        six        122       mpfi 2.68   3.47
-    ## 4        2385        ohc       four        122       mpfi 3.19   3.40
-    ## 5        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 6        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 7        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 8        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 9        2385        ohc       five        122       mpfi 3.13   3.40
-    ## 10       2385        ohc       five        122       mpfi 3.13   3.40
-    ##    compression-ratio horsepower peakRpm cityMpg highwayMpg price
-    ## 1           10.14254        111    5000      31         25 13495
-    ## 2           10.14254        111    5000      31         25 16500
-    ## 3           10.14254        154    5000      31         25 16500
-    ## 4           10.14254        102    5500      31         25 13950
-    ## 5           10.14254        115    5500      31         25 17450
-    ## 6           10.14254        110    5500      31         25 15250
-    ## 7           10.14254        110    5500      31         25 17710
-    ## 8           10.14254        110    5500      31         25 18920
-    ## 9           10.14254        140    5500      31         25 23875
-    ## 10          10.14254        160    5500      31         25     0
+    ## # A tibble: 6 × 26
+    ##    symb normLoss make        fuelType aspiration nDoors bodyStyle   driveWheels
+    ##   <int>    <int> <fct>       <fct>    <fct>      <fct>  <fct>       <fct>      
+    ## 1     3       NA alfa-romero gas      std        two    convertible rwd        
+    ## 2     3       NA alfa-romero gas      std        two    convertible rwd        
+    ## 3     1       NA alfa-romero gas      std        two    hatchback   rwd        
+    ## 4     2      164 audi        gas      std        four   sedan       fwd        
+    ## 5     2      164 audi        gas      std        four   sedan       4wd        
+    ## 6     2       NA audi        gas      std        two    sedan       fwd        
+    ## # ℹ 18 more variables: engineLocation <fct>, wheelBase <dbl>, length <dbl>,
+    ## #   width <dbl>, height <dbl>, curbWeight <int>, engineType <fct>,
+    ## #   nrCylinds <fct>, engineSize <int>, fuelSystem <fct>, bore <dbl>,
+    ## #   stroke <dbl>, compressionRatio <dbl>, horsePower <int>, peakRpm <int>,
+    ## #   cityMpg <int>, highwayMpg <int>, price <int>
 
 ### (h) Combine the three last imputations to obtain a final dataset. Are there any duplicated cases?
 
 ### Tip: use the functions distinct() and count()
 
 ``` r
-# Verificar el resultado
-newCarInsuranceFInal <- carInsurancenDoorsMode
+#imputar valores NA
+carInsurancenDoorsModeImpute <- carInsurancenDoorsMode %>% impute_zero_all()
+
+
+
+newCarInsuranceFInal <- carInsurancenDoorsModeImpute
 
 # Verificar si existen casos duplicados
 casosDuplicados <- newCarInsuranceFInal %>%
@@ -631,50 +497,24 @@ if (nrow(duplicadosPorColumna) == 0) {
 head(newCarInsuranceFInal,10)
 ```
 
-    ##    symboling normalizedLosses        make fuelType aspiration nDoors
-    ## 1          0                0 alfa-romero      gas        std    two
-    ## 2          0                0 alfa-romero      gas        std    two
-    ## 3          0                0 alfa-romero      gas        std    two
-    ## 4          0              164        audi      gas        std   four
-    ## 5          0              164        audi      gas        std   four
-    ## 6          0                0        audi      gas        std    two
-    ## 7          0              158        audi      gas        std   four
-    ## 8          0                0        audi      gas        std   four
-    ## 9          0              158        audi      gas      turbo   four
-    ## 10         0                0        audi      gas      turbo    two
-    ##      bodyStyle driveWheels engineLocation wheelBase   length   width   height
-    ## 1  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 2  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 3    hatchback         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 4        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 5        sedan         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ## 6        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 7        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 8        wagon         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 9        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 10   hatchback         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ##    curbWeight engineType nCylinders engineSize fuelSystem bore stroke
-    ## 1        2385       dohc       four        122       mpfi 3.47   2.68
-    ## 2        2385       dohc       four        122       mpfi 3.47   2.68
-    ## 3        2385       ohcv        six        122       mpfi 2.68   3.47
-    ## 4        2385        ohc       four        122       mpfi 3.19   3.40
-    ## 5        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 6        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 7        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 8        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 9        2385        ohc       five        122       mpfi 3.13   3.40
-    ## 10       2385        ohc       five        122       mpfi 3.13   3.40
-    ##    compression-ratio horsepower peakRpm cityMpg highwayMpg price
-    ## 1           10.14254        111    5000      31         25 13495
-    ## 2           10.14254        111    5000      31         25 16500
-    ## 3           10.14254        154    5000      31         25 16500
-    ## 4           10.14254        102    5500      31         25 13950
-    ## 5           10.14254        115    5500      31         25 17450
-    ## 6           10.14254        110    5500      31         25 15250
-    ## 7           10.14254        110    5500      31         25 17710
-    ## 8           10.14254        110    5500      31         25 18920
-    ## 9           10.14254        140    5500      31         25 23875
-    ## 10          10.14254        160    5500      31         25     0
+    ## # A tibble: 10 × 26
+    ##     symb normLoss make        fuelType aspiration nDoors bodyStyle   driveWheels
+    ##    <int>    <int> <fct>       <fct>    <fct>      <fct>  <fct>       <fct>      
+    ##  1     3        0 alfa-romero gas      std        two    convertible rwd        
+    ##  2     3        0 alfa-romero gas      std        two    convertible rwd        
+    ##  3     1        0 alfa-romero gas      std        two    hatchback   rwd        
+    ##  4     2      164 audi        gas      std        four   sedan       fwd        
+    ##  5     2      164 audi        gas      std        four   sedan       4wd        
+    ##  6     2        0 audi        gas      std        two    sedan       fwd        
+    ##  7     1      158 audi        gas      std        four   sedan       fwd        
+    ##  8     1        0 audi        gas      std        four   wagon       fwd        
+    ##  9     1      158 audi        gas      turbo      four   sedan       fwd        
+    ## 10     0        0 audi        gas      turbo      two    hatchback   4wd        
+    ## # ℹ 18 more variables: engineLocation <fct>, wheelBase <dbl>, length <dbl>,
+    ## #   width <dbl>, height <dbl>, curbWeight <int>, engineType <fct>,
+    ## #   nrCylinds <fct>, engineSize <int>, fuelSystem <fct>, bore <dbl>,
+    ## #   stroke <dbl>, compressionRatio <dbl>, horsePower <int>, peakRpm <int>,
+    ## #   cityMpg <int>, highwayMpg <int>, price <int>
 
 ## 2. Data Pre-Processing
 
@@ -710,85 +550,61 @@ library(dlookr)
 ### Tip: use the function transform().
 
 ``` r
-newCarInsuranceFInal$price <- as.numeric(newCarInsuranceFInal$price)
-
 newCarInsuranceFInal %>%
-   mutate(rangeNorm = transform(newCarInsuranceFInal$price, method = "minmax"),
-   zScoreNorm = transform(newCarInsuranceFInal$price, method = "zscore")) %>%
+   mutate(
+     rangeNorm = transform(newCarInsuranceFInal$price, method = "minmax"),
+   zScoreNorm = transform(newCarInsuranceFInal$price, method = "zscore")
+   ) %>%
    select(rangeNorm, zScoreNorm) %>%
    head(20)
 ```
 
-    ##    rangeNorm  zScoreNorm
-    ## 1  0.2972467  0.06752913
-    ## 2  0.3634361  0.43947911
-    ## 3  0.3634361  0.43947911
-    ## 4  0.3072687  0.12384768
-    ## 5  0.3843612  0.55706729
-    ## 6  0.3359031  0.28475782
-    ## 7  0.3900881  0.58924932
-    ## 8  0.4167401  0.73901953
-    ## 9  0.5258811  1.35233472
-    ## 10 0.0000000 -1.60284192
-    ## 11 0.3618943  0.43081472
-    ## 12 0.3727974  0.49208435
-    ## 13 0.4618943  0.99276244
-    ## 14 0.4648678  1.00947234
-    ## 15 0.5410793  1.43774087
-    ## 16 0.6775330  2.20453959
-    ## 17 0.9100220  3.51100616
-    ## 18 0.8123348  2.96205502
-    ## 19 0.1134581 -0.96526643
-    ## 20 0.1386564 -0.82366551
+    ## # A tibble: 20 × 2
+    ##    rangeNorm  zScoreNorm 
+    ##    <transfrm> <transfrm> 
+    ##  1 0.2972467   0.06752913
+    ##  2 0.3634361   0.43947911
+    ##  3 0.3634361   0.43947911
+    ##  4 0.3072687   0.12384768
+    ##  5 0.3843612   0.55706729
+    ##  6 0.3359031   0.28475782
+    ##  7 0.3900881   0.58924932
+    ##  8 0.4167401   0.73901953
+    ##  9 0.5258811   1.35233472
+    ## 10 0.0000000  -1.60284192
+    ## 11 0.3618943   0.43081472
+    ## 12 0.3727974   0.49208435
+    ## 13 0.4618943   0.99276244
+    ## 14 0.4648678   1.00947234
+    ## 15 0.5410793   1.43774087
+    ## 16 0.6775330   2.20453959
+    ## 17 0.9100220   3.51100616
+    ## 18 0.8123348   2.96205502
+    ## 19 0.1134581  -0.96526643
+    ## 20 0.1386564  -0.82366551
 
 ``` r
 head(newCarInsuranceFInal,10)
 ```
 
-    ##    symboling normalizedLosses        make fuelType aspiration nDoors
-    ## 1          0                0 alfa-romero      gas        std    two
-    ## 2          0                0 alfa-romero      gas        std    two
-    ## 3          0                0 alfa-romero      gas        std    two
-    ## 4          0              164        audi      gas        std   four
-    ## 5          0              164        audi      gas        std   four
-    ## 6          0                0        audi      gas        std    two
-    ## 7          0              158        audi      gas        std   four
-    ## 8          0                0        audi      gas        std   four
-    ## 9          0              158        audi      gas      turbo   four
-    ## 10         0                0        audi      gas      turbo    two
-    ##      bodyStyle driveWheels engineLocation wheelBase   length   width   height
-    ## 1  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 2  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 3    hatchback         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 4        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 5        sedan         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ## 6        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 7        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 8        wagon         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 9        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 10   hatchback         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ##    curbWeight engineType nCylinders engineSize fuelSystem bore stroke
-    ## 1        2385       dohc       four        122       mpfi 3.47   2.68
-    ## 2        2385       dohc       four        122       mpfi 3.47   2.68
-    ## 3        2385       ohcv        six        122       mpfi 2.68   3.47
-    ## 4        2385        ohc       four        122       mpfi 3.19   3.40
-    ## 5        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 6        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 7        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 8        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 9        2385        ohc       five        122       mpfi 3.13   3.40
-    ## 10       2385        ohc       five        122       mpfi 3.13   3.40
-    ##    compression-ratio horsepower peakRpm cityMpg highwayMpg price
-    ## 1           10.14254        111    5000      31         25 13495
-    ## 2           10.14254        111    5000      31         25 16500
-    ## 3           10.14254        154    5000      31         25 16500
-    ## 4           10.14254        102    5500      31         25 13950
-    ## 5           10.14254        115    5500      31         25 17450
-    ## 6           10.14254        110    5500      31         25 15250
-    ## 7           10.14254        110    5500      31         25 17710
-    ## 8           10.14254        110    5500      31         25 18920
-    ## 9           10.14254        140    5500      31         25 23875
-    ## 10          10.14254        160    5500      31         25     0
+    ## # A tibble: 10 × 26
+    ##     symb normLoss make        fuelType aspiration nDoors bodyStyle   driveWheels
+    ##    <int>    <int> <fct>       <fct>    <fct>      <fct>  <fct>       <fct>      
+    ##  1     3        0 alfa-romero gas      std        two    convertible rwd        
+    ##  2     3        0 alfa-romero gas      std        two    convertible rwd        
+    ##  3     1        0 alfa-romero gas      std        two    hatchback   rwd        
+    ##  4     2      164 audi        gas      std        four   sedan       fwd        
+    ##  5     2      164 audi        gas      std        four   sedan       4wd        
+    ##  6     2        0 audi        gas      std        two    sedan       fwd        
+    ##  7     1      158 audi        gas      std        four   sedan       fwd        
+    ##  8     1        0 audi        gas      std        four   wagon       fwd        
+    ##  9     1      158 audi        gas      turbo      four   sedan       fwd        
+    ## 10     0        0 audi        gas      turbo      two    hatchback   4wd        
+    ## # ℹ 18 more variables: engineLocation <fct>, wheelBase <dbl>, length <dbl>,
+    ## #   width <dbl>, height <dbl>, curbWeight <int>, engineType <fct>,
+    ## #   nrCylinds <fct>, engineSize <int>, fuelSystem <fct>, bore <dbl>,
+    ## #   stroke <dbl>, compressionRatio <dbl>, horsePower <int>, peakRpm <int>,
+    ## #   cityMpg <int>, highwayMpg <int>, price <int>
 
 ### b) Discretize it into 4 equal-frequency ranges an into 4 equal-width ranges.
 
@@ -804,61 +620,25 @@ newCarInsuranceFInal <- newCarInsuranceFInal %>%
 head(newCarInsuranceFInal,10)
 ```
 
-    ##    symboling normalizedLosses        make fuelType aspiration nDoors
-    ## 1          0                0 alfa-romero      gas        std    two
-    ## 2          0                0 alfa-romero      gas        std    two
-    ## 3          0                0 alfa-romero      gas        std    two
-    ## 4          0              164        audi      gas        std   four
-    ## 5          0              164        audi      gas        std   four
-    ## 6          0                0        audi      gas        std    two
-    ## 7          0              158        audi      gas        std   four
-    ## 8          0                0        audi      gas        std   four
-    ## 9          0              158        audi      gas      turbo   four
-    ## 10         0                0        audi      gas      turbo    two
-    ##      bodyStyle driveWheels engineLocation wheelBase   length   width   height
-    ## 1  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 2  convertible         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 3    hatchback         rwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 4        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 5        sedan         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ## 6        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 7        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 8        wagon         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 9        sedan         fwd          front  98.75659 174.0493 65.9078 53.72488
-    ## 10   hatchback         4wd          front  98.75659 174.0493 65.9078 53.72488
-    ##    curbWeight engineType nCylinders engineSize fuelSystem bore stroke
-    ## 1        2385       dohc       four        122       mpfi 3.47   2.68
-    ## 2        2385       dohc       four        122       mpfi 3.47   2.68
-    ## 3        2385       ohcv        six        122       mpfi 2.68   3.47
-    ## 4        2385        ohc       four        122       mpfi 3.19   3.40
-    ## 5        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 6        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 7        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 8        2385        ohc       five        122       mpfi 3.19   3.40
-    ## 9        2385        ohc       five        122       mpfi 3.13   3.40
-    ## 10       2385        ohc       five        122       mpfi 3.13   3.40
-    ##    compression-ratio horsepower peakRpm cityMpg highwayMpg price equalFrequency
-    ## 1           10.14254        111    5000      31         25 13495  (10198,16500]
-    ## 2           10.14254        111    5000      31         25 16500  (10198,16500]
-    ## 3           10.14254        154    5000      31         25 16500  (10198,16500]
-    ## 4           10.14254        102    5500      31         25 13950  (10198,16500]
-    ## 5           10.14254        115    5500      31         25 17450  (16500,45400]
-    ## 6           10.14254        110    5500      31         25 15250  (10198,16500]
-    ## 7           10.14254        110    5500      31         25 17710  (16500,45400]
-    ## 8           10.14254        110    5500      31         25 18920  (16500,45400]
-    ## 9           10.14254        140    5500      31         25 23875  (16500,45400]
-    ## 10          10.14254        160    5500      31         25     0   [0,7662.333]
-    ##       equalWidth
-    ## 1  (11350,22700]
-    ## 2  (11350,22700]
-    ## 3  (11350,22700]
-    ## 4  (11350,22700]
-    ## 5  (11350,22700]
-    ## 6  (11350,22700]
-    ## 7  (11350,22700]
-    ## 8  (11350,22700]
-    ## 9  (22700,34050]
-    ## 10     [0,11350]
+    ## # A tibble: 10 × 28
+    ##     symb normLoss make        fuelType aspiration nDoors bodyStyle   driveWheels
+    ##    <int>    <int> <fct>       <fct>    <fct>      <fct>  <fct>       <fct>      
+    ##  1     3        0 alfa-romero gas      std        two    convertible rwd        
+    ##  2     3        0 alfa-romero gas      std        two    convertible rwd        
+    ##  3     1        0 alfa-romero gas      std        two    hatchback   rwd        
+    ##  4     2      164 audi        gas      std        four   sedan       fwd        
+    ##  5     2      164 audi        gas      std        four   sedan       4wd        
+    ##  6     2        0 audi        gas      std        two    sedan       fwd        
+    ##  7     1      158 audi        gas      std        four   sedan       fwd        
+    ##  8     1        0 audi        gas      std        four   wagon       fwd        
+    ##  9     1      158 audi        gas      turbo      four   sedan       fwd        
+    ## 10     0        0 audi        gas      turbo      two    hatchback   4wd        
+    ## # ℹ 20 more variables: engineLocation <fct>, wheelBase <dbl>, length <dbl>,
+    ## #   width <dbl>, height <dbl>, curbWeight <int>, engineType <fct>,
+    ## #   nrCylinds <fct>, engineSize <int>, fuelSystem <fct>, bore <dbl>,
+    ## #   stroke <dbl>, compressionRatio <dbl>, horsePower <int>, peakRpm <int>,
+    ## #   cityMpg <int>, highwayMpg <int>, price <int>, equalFrequency <bins>,
+    ## #   equalWidth <bins>
 
 ``` r
 # Imprimir los niveles de equalFrequency
@@ -889,34 +669,21 @@ sample_60_percent <- newCarInsuranceFInal %>%
 head(sample_60_percent)
 ```
 
-    ##   symboling normalizedLosses       make fuelType aspiration nDoors   bodyStyle
-    ## 1         0              128     nissan   diesel        std    two       sedan
-    ## 2         0              101      honda      gas        std    two   hatchback
-    ## 3         0              161     peugot      gas        std   four       sedan
-    ## 4         0                0       audi      gas        std    two       sedan
-    ## 5         0              102     subaru      gas        std   four       sedan
-    ## 6         0                0 volkswagen      gas        std    two convertible
-    ##   driveWheels engineLocation wheelBase   length   width   height curbWeight
-    ## 1         fwd          front  98.75659 174.0493 65.9078 53.72488       2385
-    ## 2         fwd          front  98.75659 174.0493 65.9078 53.72488       2385
-    ## 3         rwd          front  98.75659 174.0493 65.9078 53.72488       2385
-    ## 4         fwd          front  98.75659 174.0493 65.9078 53.72488       2385
-    ## 5         4wd          front  98.75659 174.0493 65.9078 53.72488       2385
-    ## 6         fwd          front  98.75659 174.0493 65.9078 53.72488       2385
-    ##   engineType nCylinders engineSize fuelSystem bore stroke compression-ratio
-    ## 1        ohc       four        122        idi 2.99   3.47          10.14254
-    ## 2        ohc       four        122       1bbl 2.91   3.41          10.14254
-    ## 3          l       four        122       mpfi 3.46   3.19          10.14254
-    ## 4        ohc       five        122       mpfi 3.19   3.40          10.14254
-    ## 5       ohcf       four        122       2bbl 3.62   2.64          10.14254
-    ## 6        ohc       four        122       mpfi 3.19   3.40          10.14254
-    ##   horsepower peakRpm cityMpg highwayMpg price   equalFrequency    equalWidth
-    ## 1         55    4800      31         25  7099     [0,7662.333]     [0,11350]
-    ## 2         76    6000      31         25  6529     [0,7662.333]     [0,11350]
-    ## 3         97    5000      31         25 16630    (16500,45400] (11350,22700]
-    ## 4        110    5500      31         25 15250    (10198,16500] (11350,22700]
-    ## 5         82    4800      31         25  9233 (7662.333,10198]     [0,11350]
-    ## 6         90    5500      31         25 11595    (10198,16500] (11350,22700]
+    ## # A tibble: 6 × 28
+    ##    symb normLoss make       fuelType aspiration nDoors bodyStyle   driveWheels
+    ##   <int>    <int> <fct>      <fct>    <fct>      <fct>  <fct>       <fct>      
+    ## 1     1      128 nissan     diesel   std        two    sedan       fwd        
+    ## 2     1      101 honda      gas      std        two    hatchback   fwd        
+    ## 3     0      161 peugot     gas      std        four   sedan       rwd        
+    ## 4     2        0 audi       gas      std        two    sedan       fwd        
+    ## 5     0      102 subaru     gas      std        four   sedan       4wd        
+    ## 6     3        0 volkswagen gas      std        two    convertible fwd        
+    ## # ℹ 20 more variables: engineLocation <fct>, wheelBase <dbl>, length <dbl>,
+    ## #   width <dbl>, height <dbl>, curbWeight <int>, engineType <fct>,
+    ## #   nrCylinds <fct>, engineSize <int>, fuelSystem <fct>, bore <dbl>,
+    ## #   stroke <dbl>, compressionRatio <dbl>, horsePower <int>, peakRpm <int>,
+    ## #   cityMpg <int>, highwayMpg <int>, price <int>, equalFrequency <bins>,
+    ## #   equalWidth <bins>
 
 ### (b) A stratified sample of 60% of the cases of cars, according to the fuelType attribute.
 
@@ -941,20 +708,20 @@ head(muestra_estratificada)
 
     ## # A tibble: 6 × 29
     ## # Groups:   fuelType [1]
-    ##   symboling normalizedLosses make          fuelType aspiration nDoors bodyStyle
-    ##       <int> <chr>            <chr>         <chr>    <chr>      <chr>  <chr>    
-    ## 1         0 0                mazda         diesel   std        four   sedan    
-    ## 2         0 93               mercedes-benz diesel   turbo      four   sedan    
-    ## 3         0 94               volkswagen    diesel   std        four   sedan    
-    ## 4         0 93               mercedes-benz diesel   turbo      two    hardtop  
-    ## 5         0 95               volvo         diesel   turbo      four   sedan    
-    ## 6         0 91               toyota        diesel   std        four   hatchback
-    ## # ℹ 22 more variables: driveWheels <chr>, engineLocation <chr>,
-    ## #   wheelBase <dbl>, length <dbl>, width <dbl>, height <dbl>, curbWeight <int>,
-    ## #   engineType <chr>, nCylinders <chr>, engineSize <int>, fuelSystem <chr>,
-    ## #   bore <chr>, stroke <chr>, `compression-ratio` <dbl>, horsepower <chr>,
-    ## #   peakRpm <chr>, cityMpg <int>, highwayMpg <int>, price <dbl>,
-    ## #   equalFrequency <bins>, equalWidth <bins>, tamaño_muestra <dbl>
+    ##    symb normLoss make          fuelType aspiration nDoors bodyStyle driveWheels
+    ##   <int>    <int> <fct>         <fct>    <fct>      <fct>  <fct>     <fct>      
+    ## 1     0        0 mazda         diesel   std        four   sedan     rwd        
+    ## 2    -1       93 mercedes-benz diesel   turbo      four   sedan     rwd        
+    ## 3     2       94 volkswagen    diesel   std        four   sedan     fwd        
+    ## 4     0       93 mercedes-benz diesel   turbo      two    hardtop   rwd        
+    ## 5    -1       95 volvo         diesel   turbo      four   sedan     rwd        
+    ## 6     0       91 toyota        diesel   std        four   hatchback fwd        
+    ## # ℹ 21 more variables: engineLocation <fct>, wheelBase <dbl>, length <dbl>,
+    ## #   width <dbl>, height <dbl>, curbWeight <int>, engineType <fct>,
+    ## #   nrCylinds <fct>, engineSize <int>, fuelSystem <fct>, bore <dbl>,
+    ## #   stroke <dbl>, compressionRatio <dbl>, horsePower <int>, peakRpm <int>,
+    ## #   cityMpg <int>, highwayMpg <int>, price <int>, equalFrequency <bins>,
+    ## #   equalWidth <bins>, tamaño_muestra <dbl>
 
 ### (c) Use the table() function to inspect the distribution of values in each of the two samples above
 
@@ -973,3 +740,32 @@ table(muestra_estratificada$fuelType)
     ## 
     ## diesel    gas 
     ##     12    111
+
+## 4. Load the package corrplot and select the numeric attributes of the car insurance data set.
+
+### (a) Using the function cor(), obtain the pearson correlation coefficient between each pair of variables
+
+``` r
+# Cargar el paquete corrplot
+library(corrplot)
+```
+
+    ## Warning: package 'corrplot' was built under R version 4.3.1
+
+    ## corrplot 0.92 loaded
+
+``` r
+# Seleccionar las variables numéricas del conjunto de datos
+numericVars <- newCarInsuranceFInal %>%
+  select_if(is.numeric)
+
+# Calcular la matriz de correlación de Pearson
+corMatrix <- cor(numericVars, method = "pearson")
+
+
+
+# Visualizar la matriz de correlación
+corrplot(corMatrix, method = "color")
+```
+
+![](Practica02_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->

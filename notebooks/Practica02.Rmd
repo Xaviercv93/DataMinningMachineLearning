@@ -17,29 +17,40 @@ library(ggplot2)
 
 ### Load the carInsurance data set about the insurance risk rating of cars based on several characteristics of each car
 ```{r}
-#lee archivo csv, se indica que no contiene fila de encabezado
-data <- read.csv('../data/02_data/carInsurance.data', header=FALSE)
+load("../data/02_data/carInsurance.Rdata") 
+carIns
+carInsurance <- carIns
+head(carInsurance, 10)
 
-#reemplaza valores ? por NA
-data[data == "?"] <- NA
+# #lee archivo csv, se indica que no contiene fila de encabezado
+# data <- read.csv('../data/02_data/carInsurance.data', header=FALSE)
+# 
+# #reemplaza valores ? por NA
+# data[data == "?"] <- NA
+# 
+# #crea un dataframe llamado carInsurance
+# #se usa el objeto data como argumento para la funcion data.frame()
+# carInsurance <- data.frame(data)
+# 
+# # vector de nombres de encabezado para el dataframe
+# header <- c("symboling","normalizedLosses","make","fuelType","aspiration","nDoors","bodyStyle","driveWheels","engineLocation","wheelBase","length","width","height","curbWeight","engineType","nCylinders","engineSize","fuelSystem","bore","stroke","compression-ratio","horsepower","peakRpm","cityMpg","highwayMpg","price")
+# 
+# # Establecer el encabezado al dataframe
+# names(carInsurance) <- header
+# 
+# 
+# 
+# # Imprimir el dataframe, solo 10 filas
+# head(carInsurance, 10)
 
-#crea un dataframe llamado carInsurance
-#se usa el objeto data como argumento para la funcion data.frame()
-carInsurance <- data.frame(data)
 
-# vector de nombres de encabezado para el dataframe
-header <- c("symboling","normalizedLosses","make","fuelType","aspiration","nDoors","bodyStyle","driveWheels","engineLocation","wheelBase","length","width","height","curbWeight","engineType","nCylinders","engineSize","fuelSystem","bore","stroke","compression-ratio","horsepower","peakRpm","cityMpg","highwayMpg","price")
 
-# Establecer el encabezado al dataframe
-names(carInsurance) <- header
-
-#imprimir el dataframe, solo 10 filas
-head(carInsurance,10)
 ```
 ### (a) Check if there are any missing values.
 
 
 ```{r}
+
 columnas_valores_faltantes <- colSums(is.na(carInsurance))>0
 #head(columnas_valores_faltantes,10)
 nombres_columnas_valores_faltantes <- names(columnas_valores_faltantes[columnas_valores_faltantes])
@@ -81,7 +92,7 @@ carInsuranceImpute <- carInsurance %>% impute_zero_all()
 # Reemplazar los valores NA por ceros en todas las columnas
 #carInsuranceImpute <- impute_zero_all(carInsuranceImpute)
 
-head(carInsuranceImpute, 10)
+head(carInsuranceImpute, 20)
 #count(carInsuranceImpute)
 
 
@@ -93,7 +104,7 @@ head(carInsuranceImpute, 10)
 
 
 # Identificar columnas con valores de tipo double
-columnas_double <- sapply(carInsuranceImpute, is.double)
+columnas_double <- sapply(carInsurance, is.double)
 
 #nombre de las columnas_double
 nombres_columnas_double <- names(columnas_double[columnas_double])
@@ -101,16 +112,17 @@ nombres_columnas_double <- names(columnas_double[columnas_double])
 #typeof(nombres_columnas_double)
 
 # Calcular la media de cada columna
-media <- colMeans(carInsuranceImpute[,nombres_columnas_double])
+media <- colMeans(carInsurance[,nombres_columnas_double], na.rm = TRUE)
 media
 
 # Crear un nuevo conjunto de datos imputando la media en las columnas correspondientes
-carInsuranceMean <- carInsuranceImpute
+carInsuranceMean <- carInsurance
 
 for (col in nombres_columnas_double) {
-  carInsuranceMean[[col]] <- media[col]
+  carInsuranceMean[[col]][is.na(carInsuranceMean[[col]])] <- media[col]	
 }
-head(carInsuranceMean, 10)
+head(carInsurance[, sapply(carInsurance, is.double)])
+head(carInsuranceMean[, sapply(carInsuranceMean, is.double)])
 
 
 ```
@@ -120,6 +132,33 @@ head(carInsuranceMean, 10)
 ```{r}
 # Cargar el paquete necesario
 library(modeest)
+
+
+
+columnas_valores_faltantes <- colSums(is.na(carInsuranceMean))>0
+#head(columnas_valores_faltantes,10)
+nombres_columnas_valores_faltantes <- names(columnas_valores_faltantes[columnas_valores_faltantes])
+print(nombres_columnas_valores_faltantes)
+
+
+valores_faltantes <- any_na(carInsuranceMean)
+
+#valores_faltantes
+
+if (valores_faltantes) {
+  print("Faltan valores en el conjunto de datos.")
+
+} else {
+  print("No hay valores faltantes en el conjunto de datos.")
+
+}
+
+
+
+
+
+
+
 
 
 #identificar columnas int
@@ -151,17 +190,15 @@ moda <- sapply(carInsuranceMean[, nombres_columnas_integer], moda_personalizada)
 
 # Resultado: vector con las modas de cada columna
 moda
-
-
-# Crear un nuevo conjunto de datos imputando la media en las columnas correspondientes
-carInsuranceMode <- carInsuranceMean 
-head(carInsuranceMode, 10)
-
+# Crear un nuevo conjunto de datos imputando la moda en las columnas correspondientes
+carInsuranceMode <- carInsuranceMean
 
 for (col in nombres_columnas_integer) {
-  carInsuranceMode[[col]] <- moda[col]
+  valores_faltantes <- is.na(carInsuranceMode[[col]])
+  carInsuranceMode[[col]][valores_faltantes] <- moda[col]
 }
-head(carInsuranceMode, 10)
+
+head(carInsuranceMode[, sapply(carInsuranceMode, is.integer)])
 
 ```
 
@@ -179,7 +216,7 @@ nDoorsMode
 
 carInsurancenDoorsMode <- carInsuranceMode %>%
   mutate(nDoors = impute_replace_all(nDoors, nDoorsMode))
-head(carInsurancenDoorsMode, 10)
+head(carInsurancenDoorsMode)
 
 ```
 
@@ -188,8 +225,12 @@ head(carInsurancenDoorsMode, 10)
 
 
 ```{r}
-# Verificar el resultado
-newCarInsuranceFInal <- carInsurancenDoorsMode
+#imputar valores NA
+carInsurancenDoorsModeImpute <- carInsurancenDoorsMode %>% impute_zero_all()
+
+
+
+newCarInsuranceFInal <- carInsurancenDoorsModeImpute
 
 # Verificar si existen casos duplicados
 casosDuplicados <- newCarInsuranceFInal %>%
@@ -239,11 +280,11 @@ library(dlookr)
 
 ```{r}
 
-newCarInsuranceFInal$price <- as.numeric(newCarInsuranceFInal$price)
-
 newCarInsuranceFInal %>%
-   mutate(rangeNorm = transform(newCarInsuranceFInal$price, method = "minmax"),
-   zScoreNorm = transform(newCarInsuranceFInal$price, method = "zscore")) %>%
+   mutate(
+     rangeNorm = transform(newCarInsuranceFInal$price, method = "minmax"),
+   zScoreNorm = transform(newCarInsuranceFInal$price, method = "zscore")
+   ) %>%
    select(rangeNorm, zScoreNorm) %>%
    head(20)
 
@@ -316,4 +357,28 @@ table(muestra_estratificada$fuelType)
 
 
 ```
+## 4. Load the package corrplot and select the numeric attributes of the car insurance data set.
+### (a) Using the function cor(), obtain the pearson correlation coefficient between each pair of variables
 
+```{r}
+# Cargar el paquete corrplot
+library(corrplot)
+
+# Seleccionar las variables numéricas del conjunto de datos
+numericVars <- newCarInsuranceFInal %>%
+  select_if(is.numeric)
+
+# Calcular la matriz de correlación de Pearson
+corMatrix <- cor(numericVars, method = "pearson")
+
+
+
+# Visualizar la matriz de correlación
+corrplot(corMatrix, method = "color")
+
+
+
+
+
+
+```
