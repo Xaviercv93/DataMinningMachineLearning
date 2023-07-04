@@ -451,5 +451,11 @@ print(var_weights)
 ```
 ### (b) Load the package ggbiplot and plot the two first components with the function ggbiplot(). You can label each point with the lawyer’s name by setting the labels parameter.
 ```{r}
+# Cargar el paquete "ggbiplot"
+library(plyr)
+library(ggbiplot)
+
+# Plotear los dos primeros componentes utilizando ggbiplot
+ggbiplot(pca, labels = rownames(USJudgeRatings), obs.scale = 1, var.scale = 1)
 
 ```

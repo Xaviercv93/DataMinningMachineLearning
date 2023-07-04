@@ -914,3 +914,56 @@ print(var_weights)
     ## RTEN -0.465619269  0.294439861  0.62456547  0.15469084  0.24508578  0.052358190
 
 ### (b) Load the package ggbiplot and plot the two first components with the function ggbiplot(). You can label each point with the lawyer’s name by setting the labels parameter.
+
+``` r
+# Cargar el paquete "ggbiplot"
+library(plyr)
+```
+
+    ## Warning: package 'plyr' was built under R version 4.3.1
+
+    ## ------------------------------------------------------------------------------
+
+    ## You have loaded plyr after dplyr - this is likely to cause problems.
+    ## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
+    ## library(plyr); library(dplyr)
+
+    ## ------------------------------------------------------------------------------
+
+    ## 
+    ## Attaching package: 'plyr'
+
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     compact
+
+    ## The following objects are masked from 'package:dplyr':
+    ## 
+    ##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+    ##     summarize
+
+``` r
+library(ggbiplot)
+```
+
+    ## Loading required package: scales
+
+    ## 
+    ## Attaching package: 'scales'
+
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     discard
+
+    ## The following object is masked from 'package:readr':
+    ## 
+    ##     col_factor
+
+    ## Loading required package: grid
+
+``` r
+# Plotear los dos primeros componentes utilizando ggbiplot
+ggbiplot(pca, labels = rownames(USJudgeRatings), obs.scale = 1, var.scale = 1)
+```
+
+![](Practica02_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
