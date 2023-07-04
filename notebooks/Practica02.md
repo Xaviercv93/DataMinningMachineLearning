@@ -72,6 +72,7 @@ library(ggplot2)
 ### Load the carInsurance data set about the insurance risk rating of cars based on several characteristics of each car
 
 ``` r
+# Cargar el archivo de datos "carInsurance.Rdata"
 load("../data/02_data/carInsurance.Rdata") 
 carIns
 ```
@@ -97,6 +98,7 @@ carIns
     ## #   cityMpg <int>, highwayMpg <int>, price <int>
 
 ``` r
+# Asignar los datos cargados a la variable "carInsurance"
 carInsurance <- carIns
 head(carInsurance, 10)
 ```
@@ -121,6 +123,7 @@ head(carInsurance, 10)
     ## #   cityMpg <int>, highwayMpg <int>, price <int>
 
 ``` r
+# forma anterior
 # #lee archivo csv, se indica que no contiene fila de encabezado
 # data <- read.csv('../data/02_data/carInsurance.data', header=FALSE)
 # 
@@ -146,6 +149,7 @@ head(carInsurance, 10)
 ### (a) Check if there are any missing values.
 
 ``` r
+# Identificar columnas con valores faltantes
 columnas_valores_faltantes <- colSums(is.na(carInsurance))>0
 #head(columnas_valores_faltantes,10)
 nombres_columnas_valores_faltantes <- names(columnas_valores_faltantes[columnas_valores_faltantes])
@@ -156,10 +160,12 @@ nombres_columnas_valores_faltantes
     ## [6] "peakRpm"    "price"
 
 ``` r
+# Verificar si existen valores faltantes en el conjunto de datos
 valores_faltantes <- any_na(carInsurance)
 
 #valores_faltantes
 
+# Imprimir mensaje dependiendo de la existencia de valores faltantes
 if (valores_faltantes) {
   print("Faltan valores en el conjunto de datos.")
 } else {
@@ -172,15 +178,19 @@ if (valores_faltantes) {
 ### (b) Count the number of cases that have, at least, one missing value
 
 ``` r
+# Contar el número de valores faltantes por columna
 num_valores_faltantes <- carInsurance %>%
   filter_any_na() %>%
   count()
+
+# Mostrar el tipo de datos de la variable num_valores_faltantes
 typeof(num_valores_faltantes)
 ```
 
     ## [1] "list"
 
 ``` r
+# Imprimir el número de valores faltantes por columna
 print(num_valores_faltantes)
 ```
 
@@ -192,9 +202,12 @@ print(num_valores_faltantes)
 ### (c) Create a new data set by removing all the cases that have missing values.
 
 ``` r
-#head(carInsurance,10)
+# Calcular el recuento de filas en el conjunto de datos original
 #count(carInsurance)
+
+# Eliminar filas con valores faltantes
 carInsurance_sin_NA <- drop_rows_any_na(carInsurance)
+
 head(carInsurance_sin_NA,10)
 ```
 
@@ -218,6 +231,7 @@ head(carInsurance_sin_NA,10)
     ## #   cityMpg <int>, highwayMpg <int>, price <int>
 
 ``` r
+# Calcular el recuento de filas en el conjunto de datos sin valores faltantes
 #count(carInsurance_sin_NA)
 ```
 
@@ -294,6 +308,7 @@ carInsuranceMean <- carInsurance
 for (col in nombres_columnas_double) {
   carInsuranceMean[[col]][is.na(carInsuranceMean[[col]])] <- media[col] 
 }
+
 head(carInsurance[, sapply(carInsurance, is.double)])
 ```
 
@@ -324,13 +339,13 @@ head(carInsuranceMean[, sapply(carInsuranceMean, is.double)])
 ### (f) Create a new data set by imputing the mode in all the columns which have integer type values.
 
 ``` r
-# Cargar el paquete necesario
 library(modeest)
 ```
 
     ## Warning: package 'modeest' was built under R version 4.3.1
 
 ``` r
+# Identificar las columnas con valores faltantes
 columnas_valores_faltantes <- colSums(is.na(carInsuranceMean))>0
 #head(columnas_valores_faltantes,10)
 nombres_columnas_valores_faltantes <- names(columnas_valores_faltantes[columnas_valores_faltantes])
@@ -340,10 +355,8 @@ print(nombres_columnas_valores_faltantes)
     ## [1] "normLoss"   "nDoors"     "horsePower" "peakRpm"    "price"
 
 ``` r
+# Verificar si existen valores faltantes en el conjunto de datos
 valores_faltantes <- any_na(carInsuranceMean)
-
-#valores_faltantes
-
 if (valores_faltantes) {
   print("Faltan valores en el conjunto de datos.")
 
@@ -356,20 +369,12 @@ if (valores_faltantes) {
     ## [1] "Faltan valores en el conjunto de datos."
 
 ``` r
-#identificar columnas int
+# Identificar las columnas de tipo integer
 columnas_integer <- sapply(carInsuranceMean, is.integer)
-
-#print(columnas_integer)
-
-
-
-
-#nombres de las columnas int
+#nombres de las columnas integer
 nombres_columnas_integer <- names(columnas_integer[columnas_integer])
-#nombres_columnas_integer
 
-
-# Crear una función personalizada para calcular la moda de un vector
+# Función personalizada para calcular la moda de un vector
 moda_personalizada <- function(x) {
   moda <- unique(x)[which.max(tabulate(match(x, unique(x))))]
   if (length(moda) == 0) {  # Si no hay moda, devolver NA
@@ -380,9 +385,8 @@ moda_personalizada <- function(x) {
 }
 
 
-# Calcular la moda en las columnas de tipo double
+# Calcular la moda en las columnas de tipo integer
 moda <- sapply(carInsuranceMean[, nombres_columnas_integer], moda_personalizada)
-
 # Resultado: vector con las modas de cada columna
 moda
 ```
@@ -395,7 +399,6 @@ moda
 ``` r
 # Crear un nuevo conjunto de datos imputando la moda en las columnas correspondientes
 carInsuranceMode <- carInsuranceMean
-
 for (col in nombres_columnas_integer) {
   valores_faltantes <- is.na(carInsuranceMode[[col]])
   carInsuranceMode[[col]][valores_faltantes] <- moda[col]
@@ -420,6 +423,7 @@ head(carInsuranceMode[, sapply(carInsuranceMode, is.integer)])
 ### Tip: use the function impute_replace()
 
 ``` r
+# Encontrar la moda de la variable nDoors en el conjunto de datos carInsuranceMode
 nDoorsMode <- names(which.max(table(carInsuranceMode$nDoors)))
 nDoorsMode
 ```
@@ -427,8 +431,10 @@ nDoorsMode
     ## [1] "four"
 
 ``` r
+# Reemplazar los valores faltantes en la variable nDoors con la moda encontrada
 carInsurancenDoorsMode <- carInsuranceMode %>%
   mutate(nDoors = impute_replace_all(nDoors, nDoorsMode))
+
 head(carInsurancenDoorsMode)
 ```
 
@@ -550,6 +556,7 @@ library(dlookr)
 ### Tip: use the function transform().
 
 ``` r
+# Realizar la normalización de la variable price utilizando los métodos de minmax y zscore
 newCarInsuranceFInal %>%
    mutate(
      rangeNorm = transform(newCarInsuranceFInal$price, method = "minmax"),
@@ -614,6 +621,7 @@ head(newCarInsuranceFInal,10)
 library(dplyr)
 library(binr)
 
+# Realizar la transformación mediante el método de quantile y equal
 newCarInsuranceFInal <- newCarInsuranceFInal %>%
   mutate(equalFrequency = binning(price, nbins = 4, type = "quantile"),
          equalWidth = binning(price, nbins = 4, type = "equal")) 
@@ -661,11 +669,14 @@ cat("Niveles de equalWidth: ", levels(newCarInsuranceFInal$equalWidth), "\n")
 ### (a) A random sample of 60% of the cases, with replacement
 
 ``` r
+# Establecer la semilla para la generación de números aleatorios
 set.seed(111019)
 
+# Obtener una muestra del 60% de los datos
 sample_60_percent <- newCarInsuranceFInal %>%
   sample_frac(0.6, replace = TRUE)
 
+# Imprimir las primeras filas de la muestra
 head(sample_60_percent)
 ```
 
@@ -726,6 +737,7 @@ head(muestra_estratificada)
 ### (c) Use the table() function to inspect the distribution of values in each of the two samples above
 
 ``` r
+# Obtener la tabla de frecuencias de la variable fuelType en la muestra del 60%
 table(sample_60_percent$fuelType)
 ```
 
@@ -734,6 +746,7 @@ table(sample_60_percent$fuelType)
     ##      8    115
 
 ``` r
+# Obtener la tabla de frecuencias de la variable fuelType en la muestra estratificada
 table(muestra_estratificada$fuelType)
 ```
 
@@ -762,8 +775,6 @@ numericVars <- newCarInsuranceFInal %>%
 # Calcular la matriz de correlación de Pearson
 corMatrix <- cor(numericVars, method = "pearson")
 
-
-
 # Visualizar la matriz de correlación
 corrplot(corMatrix, method = "color")
 ```
@@ -771,6 +782,7 @@ corrplot(corMatrix, method = "color")
 ![](Practica02_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
+# otra forma de hacerlo
 # Seleccionar las variables enteras del conjunto de datos
 intnewCarInsuranceFInal <- newCarInsuranceFInal %>% 
     select_if(is.integer)
