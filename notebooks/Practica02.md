@@ -769,3 +769,35 @@ corrplot(corMatrix, method = "color")
 ```
 
 ![](Practica02_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
+``` r
+# Seleccionar las variables enteras del conjunto de datos
+intnewCarInsuranceFInal <- newCarInsuranceFInal %>% 
+    select_if(is.integer)
+
+# Obtener los nombres de las columnas con variables enteras
+colint <- newCarInsuranceFInal %>% 
+    select_if(is.integer) %>%
+    names()
+
+# Calcular la matriz de correlación para las variables enteras
+resMat <- cor(intnewCarInsuranceFInal)
+
+# Visualizar la matriz de correlación usando el método 'AOE'
+corrplot.mixed(resMat, order = 'AOE')
+```
+
+![](Practica02_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
+
+### (b) Apply the function cor.mtest() to the previous result to calculate the p-values and confidence intervals of the correlation coefficient for each pair of variables.
+
+``` r
+# Calcular los p-valores y los intervalos de confianza para cada coeficiente de correlación
+testRes = cor.mtest(numericVars, conf.level = 0.95)
+
+# Visualizar la matriz de correlación con p-valores significativos
+corrplot(corMatrix, p.mat = testRes$p, sig.level = 0.10,
+         addCoef.col ='black', order = 'hclust', addrect = 2,tl.cex = 0.9, number.cex = 0.5)
+```
+
+![](Practica02_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
