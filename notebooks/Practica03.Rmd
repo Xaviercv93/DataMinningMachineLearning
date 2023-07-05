@@ -92,6 +92,7 @@ text(carIns_final$cityMpg[1:10], carIns_final$highwayMpg[1:10],
      labels = rownames(carIns_final)[1:10], pos = 4, col = "black")
 
 ```
+
 ### (f) Show the distribution of cars by bodyStyle.
 ```{r}
 

@@ -174,8 +174,9 @@ text(carIns_final$cityMpg[1:10], carIns_final$highwayMpg[1:10],
      labels = rownames(carIns_final)[1:10], pos = 4, col = "black")
 ```
 
-![](Practica03_files/figure-gfm/unnamed-chunk-7-1.png)<!-- --> \### (f)
-Show the distribution of cars by bodyStyle.
+![](Practica03_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+### (f) Show the distribution of cars by bodyStyle.
 
 ``` r
 # Count the number of cars by bodyStyle
